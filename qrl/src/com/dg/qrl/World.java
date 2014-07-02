@@ -1,11 +1,11 @@
 package com.dg.qrl;
 
+import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Queue;
 import java.util.Random;
 import java.util.concurrent.Callable;
-import java.util.concurrent.Executor;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
@@ -25,6 +25,7 @@ import com.nuclearunicorn.libroguelike.utils.pathfinder.astar.implementation.ASt
 public class World {
 
 	public enum TileType {
+		VOID(false),
 		WALL(false),
 		FLOOR(true);
 		
@@ -43,6 +44,7 @@ public class World {
 		public final TileType tileType;
 		public boolean seen = false;
 		public boolean inFov = false;
+		public List<Entity> entities = new ArrayList<Entity>();
 		
 		public Tile(TileType tileType) {
 			this.tileType = tileType;
@@ -83,7 +85,6 @@ public class World {
 
 		@Override
 		public void pathFinderVisited(int x, int y) {
-			//Gdx.app.log("visited", " " + x + "," + y);
 		}
 
 		@Override
@@ -118,7 +119,6 @@ public class World {
 		private ScheduledExecutorService executor = Executors.newScheduledThreadPool(1);
 		
 		public Scheduler() {
-			
 		}
 		
 		public void lock() {
@@ -182,6 +182,8 @@ public class World {
 	
 	private Scheduler scheduler = new Scheduler();
 	
+	private List<Entity> entities = new ArrayList<Entity>();
+	
 	public World(int width, int height) {
 		this.width = width;
 		this.height = height;
@@ -192,8 +194,6 @@ public class World {
 		pathFinder = new AStarPathFinder(tileBasedMap, 10, true);
 		mover = new MoverAdapter();
 		
-		player = new Player(this);
-		scheduler.add(player);
 	}
 	
 	public Scheduler getScheduler() {
@@ -212,12 +212,18 @@ public class World {
 		return x >= 0 && x < width && y >= 0 && y < height;
 	}
 	
-	public TileType getTile(int x, int y) {
+	
+	
+	public TileType getTileType(int x, int y) {
 		return mapData[y][x].tileType;
 	}
 	
 	public boolean isPassable(int x, int y) {
 		return mapData[y][x].tileType.isPassable();
+	}
+	
+	public boolean isInFieldfOfView(Point position) {
+		return isInFieldfOfView(position.getX(), position.getY());
 	}
 	
 	public boolean isInFieldfOfView(int x, int y) {
@@ -232,6 +238,35 @@ public class World {
 		return player;
 	}
 	
+	private Tile getTile(Point position) {
+		return getTile(position.getX(), position.getY());
+	}
+	
+	private Tile getTile(int x, int y) {
+		return mapData[y][x];
+	}
+	
+	public void addEntity(Entity entity, int x, int y) {
+		entities.add(entity);
+		entity.getPosition().setX(x).setY(y);
+		getTile(x, y).entities.add(entity);
+	}
+	
+	public void addEntity(Entity entity, Point position) {
+		addEntity(entity, position.getX(), position.getY());
+	}
+	
+	public void removeEntity(Entity entity) {
+		entities.remove(entity);
+		getTile(entity.getPosition()).entities.remove(entity);
+	}
+	
+	public void moveEntity(Entity entity, Point newPosition) {
+		getTile(entity.getPosition()).entities.remove(entity);
+		entity.getPosition().set(newPosition);
+		getTile(newPosition).entities.add(entity);
+	}
+	
 	public void update() {
 		scheduler.update();
 	}
@@ -242,9 +277,22 @@ public class World {
 		for(int y = 0; y < height; y++) {
 			for(int x = 0; x < width; x++) {
 				TileType tileType = r.nextFloat() > 0.1f ? TileType.FLOOR : TileType.WALL;
-				mapData[y][x] = new Tile(tileType);	
+				Tile tile = new Tile(tileType);
+				mapData[y][x] = tile;
+				if(tileType == TileType.FLOOR) {
+					if(r.nextFloat() < 0.05f) {
+						Monster monster = new Monster(this);
+						addEntity(monster, x, y);
+						scheduler.add(monster);
+					}	
+				}	
 			}
 		}
+		
+
+		player = new Player(this);
+		addEntity(player, 0, 0);
+		scheduler.add(player);
 		
 		updateFieldOfView();
 	}
@@ -272,6 +320,10 @@ public class World {
 				}
 			}
 		}
+	}
+
+	public List<Entity> getEntities() {
+		return entities;
 	}
 	
 }

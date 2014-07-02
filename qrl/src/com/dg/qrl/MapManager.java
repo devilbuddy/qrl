@@ -25,7 +25,7 @@ public class MapManager {
 		TiledMapTileLayer tiledMapTileLayer = new TiledMapTileLayer(width, height, 8, 8);
 		for(int y = 0; y < height; y++) {
 			for(int x = 0; x < width; x++) {
-				TileType tileType = world.getTile(x, y);
+				TileType tileType = world.getTileType(x, y);
 				Cell cell = new Cell();
 				cell.setTile(assets.getTile(tileType));
 				tiledMapTileLayer.setCell(x, y, cell);

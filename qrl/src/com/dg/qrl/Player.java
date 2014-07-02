@@ -24,7 +24,7 @@ public class Player extends Entity implements Actor {
 		
 		if(path != null && path.size() > 0) {
 			Point next = path.remove(0);
-			getPosition().set(next);
+			world.moveEntity(this, next);
 			world.updateFieldOfView();
 			world.getScheduler().unlock(0.1f);
 		} 

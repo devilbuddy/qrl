@@ -1,5 +1,7 @@
 package com.dg.qrl;
 
+import java.util.List;
+
 import com.badlogic.gdx.ApplicationListener;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Color;
@@ -106,6 +108,17 @@ public class QrlGame implements ApplicationListener {
 		Entity player = world.getPlayer();
 		spriteBatch.setColor(Color.WHITE);
 		spriteBatch.draw(assets.playerTextureRegion, player.getPosition().getX() * 8, player.getPosition().getY() * 8);
+		
+		List<Entity> entities = world.getEntities();
+		for(int i = 0; i < entities.size(); i++) {
+			Entity entity = entities.get(i);
+			if(entity != player) {
+				if(world.isInFieldfOfView(entity.getPosition())) {
+					spriteBatch.draw(assets.monsterTextureRegion, entity.getPosition().getX() * 8, entity.getPosition().getY() * 8);
+				}
+			}
+		}
+		
 		spriteBatch.end();
 		
 		spriteBatch.setProjectionMatrix(mainCamera.combined);
@@ -114,7 +127,7 @@ public class QrlGame implements ApplicationListener {
 		float mapHeight = mapCamera.viewportWidth * 2;
 		spriteBatch.draw(assets.whitePixel, 0, 0, mainCamera.viewportWidth, mainCamera.viewportHeight - mapHeight);
 		
-		
+		assets.font.draw(spriteBatch, "FPS: " + Gdx.graphics.getFramesPerSecond(), 1, 40);
 		assets.font.draw(spriteBatch, "X:" + player.getPosition().getX() +  " Y:" + player.getPosition().getY(), 1, 32);
 		assets.font.draw(spriteBatch, "Camera:" + mapCamera.position, 1, 24);
 		assets.font.draw(spriteBatch, "mapScreenArea:" + mapScreenArea, 1, 16);

@@ -54,8 +54,7 @@ public class InputManager extends InputMultiplexer implements GestureListener {
 		}
 		if(moved) {
 			if(world.isPassable(nextX, nextY)) {
-				position.setX(nextX);
-				position.setY(nextY);
+				world.moveEntity(player, position);
 				world.updateFieldOfView();	
 			}
 			

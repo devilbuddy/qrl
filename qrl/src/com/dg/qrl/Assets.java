@@ -67,6 +67,8 @@ public class Assets {
 	
 	public TiledMapTileSet tiledMapTileSet;
 	public TextureRegion playerTextureRegion;
+	public TextureRegion monsterTextureRegion;
+	
 	public TextureRegion whitePixel;
 	
 	private Map<TileType, MapTile> tiles;
@@ -87,6 +89,7 @@ public class Assets {
 		addTile(TileType.FLOOR, 2, tileTextureRegions[0][0]);
 		
 		playerTextureRegion = tileTextureRegions[0][30];
+		monsterTextureRegion = tileTextureRegions[17][32];
 		
 		whitePixel = new TextureRegion(environmentTexture, 8, 8, 1, 1);
 	}
