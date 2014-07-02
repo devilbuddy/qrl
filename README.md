@@ -1,4 +1,4 @@
 qrl
 ===
 
-qrl
+qrl - mobile roguelike
