@@ -11,11 +11,12 @@ import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicInteger;
 
+import rlforj.los.BresOpportunisticLos;
 import rlforj.los.IFovAlgorithm;
+import rlforj.los.ILosAlgorithm;
 import rlforj.los.ILosBoard;
 import rlforj.los.PrecisePermissive;
 
-import com.badlogic.gdx.Gdx;
 import com.dg.qrl.Entity.Point;
 import com.nuclearunicorn.libroguelike.utils.pathfinder.astar.Mover;
 import com.nuclearunicorn.libroguelike.utils.pathfinder.astar.PathFinder;
@@ -174,6 +175,7 @@ public class World {
 	private Player player;
 	
 	private IFovAlgorithm fovAlgorithm;
+	private ILosAlgorithm losAlgorithm;
 	private ILosBoard losBoard;
 	
 	private TileBasedMap tileBasedMap;
@@ -189,6 +191,7 @@ public class World {
 		this.height = height;
 		
 		fovAlgorithm = new PrecisePermissive();
+		losAlgorithm = new BresOpportunisticLos();
 		losBoard = new LosBoardAdapter();
 		tileBasedMap = new TileBasedMapAdapter();
 		pathFinder = new AStarPathFinder(tileBasedMap, 10, true);
@@ -242,6 +245,21 @@ public class World {
 	
 	private Tile getTile(int x, int y) {
 		return mapData[y][x];
+	}
+	
+	public boolean existsLineOfSight(Point from, Point to) {
+		return existsLineOfSight(from, to, -1);
+	}
+	
+	public boolean existsLineOfSight(Point from, Point to, int maxLength) {
+		boolean calculateProject = maxLength > 0;
+		boolean losExists = losAlgorithm.existsLineOfSight(losBoard, from.getX(), from.getY(), to.getX(), to.getY(), calculateProject);
+		if (losExists && calculateProject) {
+			// projectPath contains from, so subtract 1
+			return (losAlgorithm.getProjectPath().size() - 1) <= maxLength;
+		} else {
+			return losExists;
+		}
 	}
 	
 	public void addEntity(Entity entity, int x, int y) {
@@ -313,7 +331,7 @@ public class World {
 			if(player.canAct()) {
 				List<Point> path = pathFinder.findPath(mover, start.getX(), start.getY(), x, y);
 				if(path != null) {
-					Gdx.app.log("", "" + path.toString());
+					//Gdx.app.log("", "" + path.toString());
 					player.setPath(path);	
 				}
 			}

@@ -32,6 +32,11 @@ public class Entity {
 			return this;
 		}
 		
+		public void translate(Direction direction) {
+			this.x += direction.dx;
+			this.y += direction.dy;
+		}
+		
 		public void set(Point other) {
 			this.x = other.getX();
 			this.y = other.getY();
@@ -44,7 +49,7 @@ public class Entity {
 	
 	public static class Stats {
 		private int hp;
-		
+		private int maxHp;
 	}
 	
 	private Point position = new Point();
