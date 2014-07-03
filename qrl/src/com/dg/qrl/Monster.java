@@ -1,5 +1,6 @@
 package com.dg.qrl;
 
+import java.util.List;
 import java.util.Random;
 
 import com.badlogic.gdx.Gdx;
@@ -37,15 +38,34 @@ public class Monster extends Entity implements Actor {
 		public void act(Monster monster, World world) {
 			Player player = world.getPlayer();
 			if(world.existsLineOfSight(monster.getPosition(), player.getPosition(), monster.getProperties().alertRadius)) {
-				monster.setState(StateKey.MOVE_RANDOMLY);	
+				monster.setState(StateKey.MOVE_AND_ATTACK);	
 			}
+		}
+	};
+	
+	private static final State moveAndAttackState = new State() {
+		
+		@Override
+		public void act(Monster monster, World world) {
+			Player player = world.getPlayer();
+			List<Point> path = world.findPath(monster.getPosition(), player.getPosition());
+			if(path != null) {
+				Point next = path.get(0);
+				if(world.isPassable(next)) {
+					world.moveEntity(monster, next);	
+				}
+			} else {
+				monster.setState(StateKey.MOVE_RANDOMLY);
+			}
+			
 		}
 	};
 	
 	
 	private enum StateKey {
 		IDLE(idleState),
-		MOVE_RANDOMLY(moveRandomlyState);
+		MOVE_RANDOMLY(moveRandomlyState),
+		MOVE_AND_ATTACK(moveAndAttackState);
 		
 		public final State state;
 		private StateKey(State state) {

@@ -41,10 +41,15 @@ public class Player extends Entity implements Actor {
 	private void stepPathIfPossible() {
 		if(canAct() && path != null && path.size() > 0) {
 			Point next = path.remove(0);
-			world.moveEntity(this, next);
-			world.updateFieldOfView();
-			world.getScheduler().unlock(0.05f);
-			canAct.set(false);
+			if(world.isPassable(next)) {
+				world.moveEntity(this, next);
+				world.updateFieldOfView();
+				world.getScheduler().unlock(0.05f);
+				canAct.set(false);	
+			} else {
+				path = null;
+			}
+			
 		} 
 	}
 	

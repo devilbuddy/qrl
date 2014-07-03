@@ -29,6 +29,7 @@ public class InputManager extends InputMultiplexer implements GestureListener {
 	}
 	
 	public void update() {
+		/*
 		Entity player = world.getPlayer();
 		Point position = player.getPosition();
 		int y = position.getY();
@@ -59,7 +60,7 @@ public class InputManager extends InputMultiplexer implements GestureListener {
 			}
 			
 		}
-		
+		*/
 	}
 
 	private Vector3 unproject(float x, float y) {

@@ -1,3 +1,4 @@
 qrl-android/bin/*
 qrl-desktop/bin/*
 qrl/bin/*
+qrl-desktop/hs_err_pid*

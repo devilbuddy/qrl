@@ -28,17 +28,17 @@ public class World {
 
 	public enum TileType {
 		VOID(false),
-		WALL(false),
-		FLOOR(true);
+		WALL(true),
+		FLOOR(false);
 		
-		private final boolean passable;
+		private final boolean solid;
 		
-		private TileType(boolean passable) {
-			this.passable = passable;
+		private TileType(boolean solid) {
+			this.solid = solid;
 		}
 		
-		public boolean isPassable() {
-			return passable;
+		public boolean isSolid() {
+			return solid;
 		}
 	}
 	
@@ -51,6 +51,10 @@ public class World {
 		public Tile(TileType tileType) {
 			this.tileType = tileType;
 		}
+		
+		public boolean isOccupied() {
+			return entities.size() > 0;
+		}
 	}
 	
 	private class LosBoardAdapter implements ILosBoard {
@@ -62,7 +66,7 @@ public class World {
 
 		@Override
 		public boolean isObstacle(int x, int y) {
-			return !isPassable(x, y);
+			return blocksLineOfSight(x, y);
 		}
 
 		@Override
@@ -221,8 +225,16 @@ public class World {
 		return mapData[y][x].tileType;
 	}
 	
+	public boolean isPassable(Point position) {
+		return isPassable(position.getX(), position.getY());
+	}
+	
 	public boolean isPassable(int x, int y) {
-		return contains(x, y) && mapData[y][x].tileType.isPassable();
+		return contains(x, y) && !mapData[y][x].tileType.isSolid() && !mapData[y][x].isOccupied();
+	}
+	
+	public boolean blocksLineOfSight(int x, int y) {
+		return contains(x, y) && mapData[y][x].tileType.isSolid();
 	}
 	
 	public boolean isInFieldfOfView(Point position) {
@@ -330,15 +342,27 @@ public class World {
 	public void onTileTapped(int x, int y) {
 		if(isSeen(x, y) && isPassable(x, y)) {
 			Point start = player.getPosition();
-			List<Point> path = pathFinder.findPath(mover, start.getX(), start.getY(), x, y);
-			if(path != null && path.size() > 1) {
-				//first element is current position, so remove it
-				path.remove(0);
+			List<Point> path = findPath(start.getX(), start.getY(), x, y);
+			if(path != null ) {
 				player.setPath(path);	
 			}
 		}
 	}
-
+	
+	public List<Point> findPath(Point from, Point to) {
+		return findPath(from.getX(), from.getY(), to.getX(), to.getY());
+	}
+	
+	public List<Point> findPath(int fromX, int fromY, int toX, int toY) {
+		List<Point> path = pathFinder.findPath(mover, fromX, fromY, toX, toY);
+		if(path != null && path.size() > 1) {
+			//first element is current position, so remove it
+			path.remove(0);
+			return path;
+		}
+		return null;
+	}
+	
 	public List<Entity> getEntities() {
 		return entities;
 	}
