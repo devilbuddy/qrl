@@ -76,7 +76,7 @@ public class InputManager extends InputMultiplexer implements GestureListener {
 
 	@Override
 	public boolean tap(float x, float y, int count, int button) {
-		if(touchableArea.contains(x, y)) {
+		if(touchableArea.contains(x, y) && count == 1) {
 			Vector3 v = unproject(x, y);
 			int tileX = (int) (v.x / 8);
 			int tileY = (int) (v.y / 8);

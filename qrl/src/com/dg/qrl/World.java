@@ -17,6 +17,7 @@ import rlforj.los.ILosAlgorithm;
 import rlforj.los.ILosBoard;
 import rlforj.los.PrecisePermissive;
 
+import com.badlogic.gdx.Gdx;
 import com.dg.qrl.Entity.Point;
 import com.nuclearunicorn.libroguelike.utils.pathfinder.astar.Mover;
 import com.nuclearunicorn.libroguelike.utils.pathfinder.astar.PathFinder;
@@ -166,6 +167,7 @@ public class World {
 		}
 	}
 	
+	private static final String tag = "World";
 	
 	private int width;
 	private int height;
@@ -278,6 +280,7 @@ public class World {
 	}
 	
 	public void moveEntity(Entity entity, Point newPosition) {
+		Gdx.app.log(tag, "moveEntity " + entity + " to:" + newPosition);
 		getTile(entity.getPosition()).entities.remove(entity);
 		entity.getPosition().set(newPosition);
 		getTile(newPosition).entities.add(entity);
@@ -325,15 +328,13 @@ public class World {
 	}
 
 	public void onTileTapped(int x, int y) {
-		if(contains(x, y) && isSeen(x, y) && isPassable(x, y)) {
-			
+		if(isSeen(x, y) && isPassable(x, y)) {
 			Point start = player.getPosition();
-			if(player.canAct()) {
-				List<Point> path = pathFinder.findPath(mover, start.getX(), start.getY(), x, y);
-				if(path != null) {
-					//Gdx.app.log("", "" + path.toString());
-					player.setPath(path);	
-				}
+			List<Point> path = pathFinder.findPath(mover, start.getX(), start.getY(), x, y);
+			if(path != null && path.size() > 1) {
+				//first element is current position, so remove it
+				path.remove(0);
+				player.setPath(path);	
 			}
 		}
 	}

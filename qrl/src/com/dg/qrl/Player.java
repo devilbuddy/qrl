@@ -3,10 +3,13 @@ package com.dg.qrl;
 import java.util.List;
 import java.util.concurrent.atomic.AtomicBoolean;
 
+import com.badlogic.gdx.Gdx;
 import com.dg.qrl.World.Actor;
 
 public class Player extends Entity implements Actor {
 
+	private final String tag = "Player";
+	
 	private final World world;
 	
 	private AtomicBoolean canAct = new AtomicBoolean(false);
@@ -19,15 +22,11 @@ public class Player extends Entity implements Actor {
 
 	@Override
 	public void act() {
+		Gdx.app.log(tag, "act");
 		canAct.set(true);
 		world.getScheduler().lock();
 		
-		if(path != null && path.size() > 0) {
-			Point next = path.remove(0);
-			world.moveEntity(this, next);
-			world.updateFieldOfView();
-			world.getScheduler().unlock(0.05f);
-		} 
+		stepPathIfPossible();
 	}
 
 	public boolean canAct() {
@@ -36,6 +35,17 @@ public class Player extends Entity implements Actor {
 	
 	public void setPath(List<Point> path) {
 		this.path = path;
-		world.getScheduler().unlock();
+		stepPathIfPossible();
 	}
+	
+	private void stepPathIfPossible() {
+		if(canAct() && path != null && path.size() > 0) {
+			Point next = path.remove(0);
+			world.moveEntity(this, next);
+			world.updateFieldOfView();
+			world.getScheduler().unlock(0.05f);
+			canAct.set(false);
+		} 
+	}
+	
 }
