@@ -4,6 +4,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
@@ -70,6 +71,9 @@ public class Assets {
 	public TextureRegion monsterTextureRegion;
 	
 	public TextureRegion whitePixel;
+	
+	public final Color seenShadowColor = new Color(0.5f, 0.5f, 0.5f, 0.7f);
+	public final Color notSeenShadowColor = new Color(0.5f, 0.5f, 0.5f, 1);
 	
 	private Map<TileType, MapTile> tiles;
 	

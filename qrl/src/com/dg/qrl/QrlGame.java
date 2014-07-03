@@ -8,6 +8,7 @@ import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL10;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.maps.tiled.TiledMapRenderer;
 import com.badlogic.gdx.maps.tiled.renderers.OrthogonalTiledMapRenderer;
 import com.badlogic.gdx.math.Rectangle;
@@ -94,27 +95,24 @@ public class QrlGame implements ApplicationListener {
 				
 				if(!inFov) {
 					if(seen) {
-						spriteBatch.setColor(0.5f, 0.5f, 0.5f, 0.7f);
-						spriteBatch.draw(assets.whitePixel, x * 8, y * 8, 8, 8);
+						spriteBatch.setColor(assets.seenShadowColor);
 					} else {
-						spriteBatch.setColor(0.5f, 0.5f, 0.5f, 1);
-						spriteBatch.draw(assets.whitePixel, x * 8, y * 8, 8, 8);
+						spriteBatch.setColor(assets.notSeenShadowColor);
 					}
-					
+					spriteBatch.draw(assets.whitePixel, x * 8, y * 8, 8, 8);
 				} 				
 			}
 		}
 		
 		Entity player = world.getPlayer();
-		spriteBatch.setColor(Color.WHITE);
-		spriteBatch.draw(assets.playerTextureRegion, player.getPosition().getX() * 8, player.getPosition().getY() * 8);
+		renderEntity(player, assets.playerTextureRegion);
 		
 		List<Entity> entities = world.getEntities();
 		for(int i = 0; i < entities.size(); i++) {
 			Entity entity = entities.get(i);
 			if(entity != player) {
 				if(world.isInFieldfOfView(entity.getPosition())) {
-					spriteBatch.draw(assets.monsterTextureRegion, entity.getPosition().getX() * 8, entity.getPosition().getY() * 8);
+					renderEntity(entity, assets.monsterTextureRegion);
 				}
 			}
 		}
@@ -135,6 +133,11 @@ public class QrlGame implements ApplicationListener {
 		
 	}
 
+	private void renderEntity(Entity entity, TextureRegion textureRegion) {
+		spriteBatch.setColor(Color.WHITE);
+		spriteBatch.draw(textureRegion, entity.getPosition().getX() * 8, entity.getPosition().getY() * 8);
+	}
+	
 	private void updateCamera() {
 		Entity cameraFocus = world.getPlayer();
 		Point positon = cameraFocus.getPosition();
