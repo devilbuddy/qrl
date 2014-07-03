@@ -42,8 +42,14 @@ public class Entity {
 		}
 	}
 	
-	private Point position = new Point();
+	public static class Stats {
+		private int hp;
+		
+	}
 	
+	private Point position = new Point();
+	private Stats stats = new Stats();
+		
 	public Entity() {
 		
 	}
@@ -51,4 +57,9 @@ public class Entity {
 	public Point getPosition() {
 		return position;
 	}
+	
+	public Stats getStats() {
+		return stats;
+	}
+	
 }

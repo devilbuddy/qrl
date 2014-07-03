@@ -212,14 +212,12 @@ public class World {
 		return x >= 0 && x < width && y >= 0 && y < height;
 	}
 	
-	
-	
 	public TileType getTileType(int x, int y) {
 		return mapData[y][x].tileType;
 	}
 	
 	public boolean isPassable(int x, int y) {
-		return mapData[y][x].tileType.isPassable();
+		return contains(x, y) && mapData[y][x].tileType.isPassable();
 	}
 	
 	public boolean isInFieldfOfView(Point position) {
@@ -227,11 +225,11 @@ public class World {
 	}
 	
 	public boolean isInFieldfOfView(int x, int y) {
-		return mapData[y][x].inFov;
+		return contains(x, y) && mapData[y][x].inFov;
 	}
 	
 	public boolean isSeen(int x, int y) {
-		return mapData[y][x].seen;
+		return contains(x, y) && mapData[y][x].seen;
 	}
 	
 	public Player getPlayer() {

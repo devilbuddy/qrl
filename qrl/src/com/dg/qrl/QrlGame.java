@@ -80,7 +80,6 @@ public class QrlGame implements ApplicationListener {
 		Gdx.gl.glClearColor(0, 0, 0, 1);
 		Gdx.gl.glClear(GL10.GL_COLOR_BUFFER_BIT);
 
-		mapCamera.update();
 		tiledMapRenderer.setView(mapCamera);
 		tiledMapRenderer.render();
 		
