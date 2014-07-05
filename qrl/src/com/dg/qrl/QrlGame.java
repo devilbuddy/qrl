@@ -39,6 +39,8 @@ public class QrlGame implements ApplicationListener {
 	private Vector3 cameraTarget = new Vector3();
 	//private Rectangle mapViewport = new Rectangle();
 	private Rectangle mapScreenArea = new Rectangle();
+
+	private CardView cardView;
 	
 	@Override
 	public void create() {		
@@ -55,6 +57,8 @@ public class QrlGame implements ApplicationListener {
 		mapManager.initTiledMap(world);		
 		
 		tiledMapRenderer = new OrthogonalTiledMapRenderer(mapManager.getMap());
+		
+		cardView = new CardView(30, 45, assets.cardBackgroundPatch);
 		
 		inputManager = new InputManager(world, mapCamera);
 		Gdx.input.setInputProcessor(inputManager);
@@ -128,6 +132,13 @@ public class QrlGame implements ApplicationListener {
 		assets.font.draw(spriteBatch, "X:" + player.getPosition().getX() +  " Y:" + player.getPosition().getY(), 1, 32);
 		assets.font.draw(spriteBatch, "Camera:" + mapCamera.position, 1, 24);
 		assets.font.draw(spriteBatch, "mapScreenArea:" + mapScreenArea, 1, 16);
+		
+		cardView.setPosition(50, 30);
+		cardView.draw(spriteBatch);
+
+		cardView.setPosition(81, 30);
+		cardView.draw(spriteBatch);
+
 		spriteBatch.end();
 		
 	}

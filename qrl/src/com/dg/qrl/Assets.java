@@ -7,6 +7,7 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
+import com.badlogic.gdx.graphics.g2d.NinePatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.maps.MapProperties;
 import com.badlogic.gdx.maps.tiled.TiledMapTile;
@@ -69,8 +70,9 @@ public class Assets {
 	public TiledMapTileSet tiledMapTileSet;
 	public TextureRegion playerTextureRegion;
 	public TextureRegion monsterTextureRegion;
-	
 	public TextureRegion whitePixel;
+	
+	public NinePatch cardBackgroundPatch;
 	
 	public final Color seenShadowColor = new Color(0.5f, 0.5f, 0.5f, 0.7f);
 	public final Color notSeenShadowColor = new Color(0.5f, 0.5f, 0.5f, 1);
@@ -96,6 +98,8 @@ public class Assets {
 		monsterTextureRegion = tileTextureRegions[17][32];
 		
 		whitePixel = new TextureRegion(environmentTexture, 8, 8, 1, 1);
+	
+		cardBackgroundPatch = new NinePatch(tileTextureRegions[2][15], 3, 3, 3, 3);
 	}
 	
 	private void addTile(TileType tileType, int id, TextureRegion textureRegion) {

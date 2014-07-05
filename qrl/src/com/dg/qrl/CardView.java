@@ -13,15 +13,18 @@ public class CardView {
 	
 	NinePatchDrawable background;
 	
-	public CardView(int x, int y, int width, int height, NinePatch backgroundPatch) {
-		this.x = x;
-		this.y = y;
+	public CardView(int width, int height, NinePatch backgroundPatch) {
 		this.width = width;
 		this.height = height; 
 		this.background = new NinePatchDrawable(backgroundPatch);
 	}
 
 
+	public void setPosition(int x, int y) {
+		this.x = x;
+		this.y = y;
+	}
+	
 	public void draw(SpriteBatch spriteBatch) {
 		background.draw(spriteBatch, x, y, width, height);
 	}
