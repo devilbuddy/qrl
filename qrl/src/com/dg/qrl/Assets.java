@@ -64,20 +64,30 @@ public class Assets {
 		
 	}
 	
+	
 	public BitmapFont font;
 	private Texture environmentTexture;
 	
 	public TiledMapTileSet tiledMapTileSet;
 	public TextureRegion playerTextureRegion;
-	public TextureRegion monsterTextureRegion;
+	public TextureRegion orcTextureRegion;
+	public TextureRegion snakeTextureRegion;
 	public TextureRegion whitePixel;
 	
 	public NinePatch cardBackgroundPatch;
+	
+	public TextureRegion cardTextureRegion;
 	
 	public final Color seenShadowColor = new Color(0.5f, 0.5f, 0.5f, 0.7f);
 	public final Color notSeenShadowColor = new Color(0.5f, 0.5f, 0.5f, 1);
 	
 	private Map<TileType, MapTile> tiles;
+	
+	interface RenderProperties {
+		TextureRegion getTextureRegion(Entity e);
+	}
+	
+	private Map<Class<?>, RenderProperties> renderProperties = new HashMap<Class<?>, Assets.RenderProperties>();
 	
 	public Assets() {
 		
@@ -95,11 +105,43 @@ public class Assets {
 		addTile(TileType.FLOOR, 2, tileTextureRegions[0][0]);
 		
 		playerTextureRegion = tileTextureRegions[0][30];
-		monsterTextureRegion = tileTextureRegions[17][32];
+		orcTextureRegion = tileTextureRegions[17][32];
+		snakeTextureRegion = tileTextureRegions[18][32];
+		
+		cardTextureRegion = tileTextureRegions[22][18];
 		
 		whitePixel = new TextureRegion(environmentTexture, 8, 8, 1, 1);
 	
 		cardBackgroundPatch = new NinePatch(tileTextureRegions[2][15], 3, 3, 3, 3);
+		
+		renderProperties.put(Monster.class, new RenderProperties() {
+			@Override
+			public TextureRegion getTextureRegion(Entity entity) {
+				//TODO: there must be a better way!!
+				Monster monster = Monster.class.cast(entity);
+				switch(monster.getType()) {
+				case ORC:
+					return orcTextureRegion;
+				case SNAKE:
+					return snakeTextureRegion;
+				default:
+					return null;
+				}
+				
+			}
+		});
+		renderProperties.put(Card.class, new RenderProperties() {
+			@Override
+			public TextureRegion getTextureRegion(Entity entity) {
+				Card card = Card.class.cast(entity);
+				return cardTextureRegion;
+			}
+		});
+	}
+	
+	public TextureRegion getTextureRegion(Entity entity) {
+		RenderProperties props = renderProperties.get(entity.getClass());
+		return props.getTextureRegion(entity);
 	}
 	
 	private void addTile(TileType tileType, int id, TextureRegion textureRegion) {

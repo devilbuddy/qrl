@@ -11,16 +11,18 @@ import com.badlogic.gdx.math.Vector3;
 public class InputManager extends InputMultiplexer implements GestureListener {
 
 	private final World world;
-	private final Camera camera;
+	private final Camera mapCamera;
+	private final Camera mainCamera;
 	private final GestureDetector gestureDetector;
 	
 	private final Rectangle touchableArea = new Rectangle();
 	
 	private final Vector3 tmp = new Vector3();
 	
-	public InputManager(World world, Camera camera) {
+	public InputManager(World world, Camera camera, Camera mainCamera) {
 		this.world = world;
-		this.camera = camera;
+		this.mapCamera = camera;
+		this.mainCamera = mainCamera;
 		gestureDetector = new GestureDetector(this);
 		addProcessor(gestureDetector);
 	}
@@ -60,7 +62,7 @@ public class InputManager extends InputMultiplexer implements GestureListener {
 		*/
 	}
 
-	private Vector3 unproject(float x, float y) {
+	private Vector3 unproject(float x, float y, Camera camera) {
 		tmp.set(x, y, 0);
 		camera.unproject(tmp);
 		return tmp;
@@ -75,7 +77,7 @@ public class InputManager extends InputMultiplexer implements GestureListener {
 	@Override
 	public boolean tap(float x, float y, int count, int button) {
 		if(touchableArea.contains(x, y) && count == 1) {
-			Vector3 v = unproject(x, y);
+			Vector3 v = unproject(x, y, mapCamera);
 			int tileX = (int) (v.x / 8);
 			int tileY = (int) (v.y / 8);
 			

@@ -58,9 +58,9 @@ public class QrlGame implements ApplicationListener {
 		
 		tiledMapRenderer = new OrthogonalTiledMapRenderer(mapManager.getMap());
 		
-		cardView = new CardView(30, 45, assets.cardBackgroundPatch);
+		cardView = new CardView(30, 45, assets.cardBackgroundPatch, assets.orcTextureRegion);
 		
-		inputManager = new InputManager(world, mapCamera);
+		inputManager = new InputManager(world, mapCamera, mainCamera);
 		Gdx.input.setInputProcessor(inputManager);
 	
 	}
@@ -115,7 +115,7 @@ public class QrlGame implements ApplicationListener {
 			Entity entity = entities.get(i);
 			if(entity != player) {
 				if(world.isInFieldfOfView(entity.getPosition())) {
-					renderEntity(entity, assets.monsterTextureRegion);
+					renderEntity(entity, assets.getTextureRegion(entity));
 				}
 			}
 		}

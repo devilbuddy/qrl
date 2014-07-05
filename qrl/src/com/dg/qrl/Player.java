@@ -1,5 +1,6 @@
 package com.dg.qrl;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.atomic.AtomicBoolean;
 
@@ -14,6 +15,9 @@ public class Player extends Entity implements Actor {
 	
 	private AtomicBoolean canAct = new AtomicBoolean(false);
 	private List<Point> path;
+	
+	private List<Card> cards = new ArrayList<Card>();
+	
 	
 	public Player(World world) {
 		super();
@@ -51,6 +55,14 @@ public class Player extends Entity implements Actor {
 			}
 			
 		} 
+	}
+	
+	public void addCard(Card card) {
+		cards.add(card);
+	}
+	
+	public List<Card> getCards() {
+		return cards;
 	}
 	
 }

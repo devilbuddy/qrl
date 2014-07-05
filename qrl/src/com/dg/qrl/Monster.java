@@ -8,6 +8,11 @@ import com.dg.qrl.World.Actor;
 
 public class Monster extends Entity implements Actor {
 
+	public enum Type {
+		ORC,
+		SNAKE
+	}
+	
 	private interface State {
 		void act(Monster monster, World world);
 	}
@@ -80,15 +85,21 @@ public class Monster extends Entity implements Actor {
 	
 	private static final String tag = "Monster";
 	
+	private final Type type;
 	private final World world;
 	private boolean canAct = false;
 	private State state;
 	private MonsterProperties properties = new MonsterProperties();
 	
-	public Monster(World world) {
+	public Monster(Type type, World world) {
 		super();
+		this.type = type;
 		this.world = world;
 		setState(StateKey.IDLE);
+	}
+	
+	public Type getType() {
+		return type;
 	}
 	
 	@Override

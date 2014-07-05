@@ -18,7 +18,9 @@ import rlforj.los.ILosBoard;
 import rlforj.los.PrecisePermissive;
 
 import com.badlogic.gdx.Gdx;
+import com.dg.qrl.Card.CardType;
 import com.dg.qrl.Entity.Point;
+import com.dg.qrl.Monster.Type;
 import com.nuclearunicorn.libroguelike.utils.pathfinder.astar.Mover;
 import com.nuclearunicorn.libroguelike.utils.pathfinder.astar.PathFinder;
 import com.nuclearunicorn.libroguelike.utils.pathfinder.astar.TileBasedMap;
@@ -312,10 +314,16 @@ public class World {
 				mapData[y][x] = tile;
 				if(tileType == TileType.FLOOR) {
 					if(r.nextFloat() < 0.05f) {
-						Monster monster = new Monster(this);
+						Type type = r.nextBoolean() ? Type.SNAKE : Type.ORC;
+						Monster monster = new Monster(type, this);
 						addEntity(monster, x, y);
 						scheduler.add(monster);
-					}	
+					}
+					
+					if(r.nextFloat() < 0.05f) {
+						Card card = new Card(CardType.FIREBALL);
+						addEntity(card, x, y);
+					}
 				}	
 			}
 		}
