@@ -12,6 +12,8 @@ import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.maps.MapProperties;
 import com.badlogic.gdx.maps.tiled.TiledMapTile;
 import com.badlogic.gdx.maps.tiled.TiledMapTileSet;
+import com.dg.qrl.Card.CardType;
+import com.dg.qrl.Monster.Type;
 import com.dg.qrl.World.TileType;
 
 public class Assets {
@@ -115,26 +117,28 @@ public class Assets {
 		cardBackgroundPatch = new NinePatch(tileTextureRegions[2][15], 3, 3, 3, 3);
 		
 		renderProperties.put(Monster.class, new RenderProperties() {
+			Map<Monster.Type, TextureRegion> regions = new HashMap<Monster.Type, TextureRegion>();
+			{
+				regions.put(Type.ORC, orcTextureRegion);
+				regions.put(Type.SNAKE, snakeTextureRegion);
+			}
 			@Override
 			public TextureRegion getTextureRegion(Entity entity) {
 				//TODO: there must be a better way!!
 				Monster monster = Monster.class.cast(entity);
-				switch(monster.getType()) {
-				case ORC:
-					return orcTextureRegion;
-				case SNAKE:
-					return snakeTextureRegion;
-				default:
-					return null;
-				}
-				
+				return regions.get(monster.getType());
 			}
 		});
 		renderProperties.put(Card.class, new RenderProperties() {
+			Map<CardType, TextureRegion> regions = new HashMap<Card.CardType, TextureRegion>();
+			{
+				regions.put(CardType.FIREBALL, cardTextureRegion);
+				regions.put(CardType.HEAL, cardTextureRegion);
+			}
 			@Override
 			public TextureRegion getTextureRegion(Entity entity) {
 				Card card = Card.class.cast(entity);
-				return cardTextureRegion;
+				return regions.get(card.getType());
 			}
 		});
 	}
