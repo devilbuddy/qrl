@@ -108,7 +108,6 @@ public class QrlGame implements ApplicationListener {
 		}
 		
 		Entity player = world.getPlayer();
-		renderEntity(player, assets.playerTextureRegion);
 		
 		List<Entity> entities = world.getEntities();
 		for(int i = 0; i < entities.size(); i++) {
@@ -119,6 +118,8 @@ public class QrlGame implements ApplicationListener {
 				}
 			}
 		}
+		
+		renderEntity(player, assets.playerTextureRegion);
 		
 		spriteBatch.end();
 		

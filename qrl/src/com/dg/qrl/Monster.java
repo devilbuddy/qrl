@@ -92,7 +92,7 @@ public class Monster extends Entity implements Actor {
 	private MonsterProperties properties = new MonsterProperties();
 	
 	public Monster(Type type, World world) {
-		super();
+		super(true);
 		this.type = type;
 		this.world = world;
 		setState(StateKey.IDLE);

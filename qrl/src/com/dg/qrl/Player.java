@@ -20,7 +20,7 @@ public class Player extends Entity implements Actor {
 	
 	
 	public Player(World world) {
-		super();
+		super(true);
 		this.world = world;
 	}
 

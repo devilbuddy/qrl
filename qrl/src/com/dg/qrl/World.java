@@ -55,7 +55,13 @@ public class World {
 		}
 		
 		public boolean isOccupied() {
-			return entities.size() > 0;
+			
+			for(int i = 0; i < entities.size(); i++) {
+				if(entities.get(i).isSolid()) {
+					return true;
+				}
+			}
+			return false;
 		}
 	}
 	

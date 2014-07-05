@@ -54,9 +54,10 @@ public class Entity {
 	
 	private Point position = new Point();
 	private Stats stats = new Stats();
-		
-	public Entity() {
-		
+	private boolean solid;	
+	
+	public Entity(boolean solid) {
+		this.solid = solid;
 	}
 	
 	public Point getPosition() {
@@ -67,4 +68,7 @@ public class Entity {
 		return stats;
 	}
 	
+	public boolean isSolid() {
+		return solid;
+	}
 }

@@ -10,7 +10,7 @@ public class Card extends Entity {
 	private final CardType cardType;
 	
 	public Card(CardType cardType) {
-		super();
+		super(false);
 		this.cardType = cardType;
 	}
 	
