@@ -40,7 +40,7 @@ public class QrlGame implements ApplicationListener {
 	//private Rectangle mapViewport = new Rectangle();
 	private Rectangle mapScreenArea = new Rectangle();
 
-	private CardView cardView;
+	private CardDeckView cardDeckView;
 	
 	@Override
 	public void create() {		
@@ -57,12 +57,12 @@ public class QrlGame implements ApplicationListener {
 		mapManager.initTiledMap(world);		
 		
 		tiledMapRenderer = new OrthogonalTiledMapRenderer(mapManager.getMap());
-		
-		cardView = new CardView(30, 45, assets.cardBackgroundPatch, assets.orcTextureRegion);
+		cardDeckView = new CardDeckView(mainCamera, assets);
 		
 		inputManager = new InputManager(world, mapCamera, mainCamera);
+		inputManager.addProcessor(0 ,cardDeckView);
+		
 		Gdx.input.setInputProcessor(inputManager);
-	
 	}
 
 	@Override
@@ -134,12 +134,8 @@ public class QrlGame implements ApplicationListener {
 		assets.font.draw(spriteBatch, "Camera:" + mapCamera.position, 1, 24);
 		assets.font.draw(spriteBatch, "mapScreenArea:" + mapScreenArea, 1, 16);
 		
-		cardView.setPosition(50, 30);
-		cardView.draw(spriteBatch);
-
-		cardView.setPosition(81, 30);
-		cardView.draw(spriteBatch);
-
+		cardDeckView.draw(spriteBatch);
+		
 		spriteBatch.end();
 		
 	}
