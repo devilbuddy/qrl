@@ -178,6 +178,7 @@ public class QrlGame implements ApplicationListener {
 		inputManager.update();	
 		updateCamera();
 		world.update();
+		cardDeckView.update(delta);
 	}
 	
 	@Override
