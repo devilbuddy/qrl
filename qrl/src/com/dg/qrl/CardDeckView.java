@@ -38,7 +38,7 @@ public class CardDeckView extends InputAdapter {
 		public void setPosition(int x, int y) {
 			this.x = x;
 			this.y = y;
-			touchBounds.setX(x).setY(y + height);
+			touchBounds.setX(x).setY(y);
 		}
 		
 		public void draw(SpriteBatch spriteBatch) {
@@ -52,6 +52,7 @@ public class CardDeckView extends InputAdapter {
 	private final Camera camera;
 	
 	private List<CardView> cardViews = new ArrayList<CardDeckView.CardView>();
+	private CardView selectedCardView = null;
 	
 	public CardDeckView(Camera camera, Assets assets) {
 		this.camera = camera;
@@ -84,10 +85,16 @@ public class CardDeckView extends InputAdapter {
 	
 	@Override
 	public boolean touchDown (int screenX, int screenY, int pointer, int button) {
+		Gdx.app.log(tag, "screenX " + screenX + " screenY:" + screenY);
+		
 		Vector3 v = unproject(screenX, screenY, camera);
+		
 		for(int i = 0; i < cardViews.size(); i++) {
 			CardView cardView = cardViews.get(i);
+
+			Gdx.app.log(tag, "touchBounds: " + cardView.touchBounds.toString());
 			if(cardView.touchBounds.contains(v.x, v.y)) {
+				selectedCardView = cardView;
 				Gdx.app.log(tag, "touchDown " + cardView);
 				return true;
 			}
@@ -97,11 +104,17 @@ public class CardDeckView extends InputAdapter {
 
 	@Override
 	public boolean touchUp (int screenX, int screenY, int pointer, int button) {
+		selectedCardView = null;
 		return false;
 	}
 
 	@Override
 	public boolean touchDragged (int screenX, int screenY, int pointer) {
+		if(selectedCardView != null) {
+			Vector3 v = unproject(screenX, screenY, camera);
+			selectedCardView.setPosition((int)v.x, (int)v.y);	
+		}
+		
 		return false;
 	}
 }
