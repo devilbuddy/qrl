@@ -342,7 +342,8 @@ public class World implements GameController {
 
 		player = new Player(this);
 		for(int i = 0; i < 5; i++) {
-			Card card = new Card(CardType.FIREBALL);
+			CardType cardType = r.nextBoolean() ? CardType.FIREBALL : CardType.HEAL;
+			Card card = new Card(cardType);
 			player.addCard(card);
 		}
 		addEntity(player, 0, 0);
@@ -372,8 +373,13 @@ public class World implements GameController {
 		}
 	}
 	
-	public void onCardPlayed(Card card) {
-		player.removeCard(card);
+	public boolean onCardPlayed(Card card) {
+		if(player.canAct()) {
+			player.removeCard(card);
+			return true;
+		} else {
+			return false;
+		}
 	}
 	
 	public List<Point> findPath(Point from, Point to) {

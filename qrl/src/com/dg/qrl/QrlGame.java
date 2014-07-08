@@ -20,7 +20,7 @@ public class QrlGame implements ApplicationListener {
 	public interface GameController {
 		Player getPlayer();
 		void onTileTapped(int x, int y);
-		void onCardPlayed(Card card);
+		boolean onCardPlayed(Card card);
 	}
 	
 	private static final String tag = "QrlGame";

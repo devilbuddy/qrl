@@ -78,7 +78,6 @@ public class Assets {
 	
 	public NinePatch cardBackgroundPatch;
 	
-	public TextureRegion cardTextureRegion;
 	
 	public final Color seenShadowColor = new Color(0.5f, 0.5f, 0.5f, 0.7f);
 	public final Color notSeenShadowColor = new Color(0.5f, 0.5f, 0.5f, 1);
@@ -99,7 +98,7 @@ public class Assets {
 		font = new BitmapFont(Gdx.files.internal("04b_03.fnt"));
 		environmentTexture = new Texture(Gdx.files.internal("assets.png"));
 	
-		TextureRegion[][] tileTextureRegions = TextureRegion.split(environmentTexture, 8, 8);
+		final TextureRegion[][] tileTextureRegions = TextureRegion.split(environmentTexture, 8, 8);
 		
 		tiledMapTileSet = new TiledMapTileSet();
 		tiles = new HashMap<World.TileType, Assets.MapTile>();;
@@ -109,8 +108,6 @@ public class Assets {
 		playerTextureRegion = tileTextureRegions[0][30];
 		orcTextureRegion = tileTextureRegions[17][32];
 		snakeTextureRegion = tileTextureRegions[18][32];
-		
-		cardTextureRegion = tileTextureRegions[22][18];
 		
 		whitePixel = new TextureRegion(environmentTexture, 8, 8, 1, 1);
 	
@@ -132,8 +129,8 @@ public class Assets {
 		renderProperties.put(Card.class, new RenderProperties() {
 			Map<CardType, TextureRegion> regions = new HashMap<Card.CardType, TextureRegion>();
 			{
-				regions.put(CardType.FIREBALL, cardTextureRegion);
-				regions.put(CardType.HEAL, cardTextureRegion);
+				regions.put(CardType.FIREBALL, tileTextureRegions[38][17]);
+				regions.put(CardType.HEAL, tileTextureRegions[38][18]);
 			}
 			@Override
 			public TextureRegion getTextureRegion(Entity entity) {

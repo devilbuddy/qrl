@@ -6,6 +6,7 @@ import java.util.List;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.InputAdapter;
 import com.badlogic.gdx.graphics.Camera;
+import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.NinePatch;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
@@ -26,14 +27,16 @@ public class CardDeckView extends InputAdapter {
 		
 		NinePatchDrawable background;
 		TextureRegion symbol;
+		BitmapFont font;
 		Rectangle touchBounds = new Rectangle();
 		
-		public CardView(Card card, int width, int height, NinePatch backgroundPatch, TextureRegion symbol) {
+		public CardView(Card card, int width, int height, NinePatch backgroundPatch, TextureRegion symbol, BitmapFont font) {
 			this.card = card;
 			this.width = width;
 			this.height = height; 
 			this.background = new NinePatchDrawable(backgroundPatch);
 			this.symbol = symbol;
+			this.font = font;
 			touchBounds.setWidth(width).setHeight(height);
 		}
 
@@ -53,6 +56,8 @@ public class CardDeckView extends InputAdapter {
 		public void draw(SpriteBatch spriteBatch) {
 			background.draw(spriteBatch, x, y, width, height);
 			spriteBatch.draw(symbol, x + 1, y + height - symbol.getRegionHeight() - 1);
+		
+			font.draw(spriteBatch, "A:1", x + 1, y + height - 16);
 		}
 		
 		public Card getCard() {
@@ -86,11 +91,11 @@ public class CardDeckView extends InputAdapter {
 
 	private void updateCardView() {
 		cardViews.clear();
-		int x = 50;
+		int x = 160/2 - (31 * 5)/2;
 		int y = 30;
 		List<Card> cards = gameController.getPlayer().getCards();
 		for(Card card : cards) {
-			CardView cardView = new CardView(card, 30, 45, assets.cardBackgroundPatch, assets.orcTextureRegion);
+			CardView cardView = new CardView(card, 30, 45, assets.cardBackgroundPatch, assets.getTextureRegion(card), assets.font);
 			cardView.setPosition(x, y);
 			cardViews.add(cardView);
 			
@@ -148,12 +153,12 @@ public class CardDeckView extends InputAdapter {
 			
 			if(selectedCardView.y >= playCardY) {
 				Gdx.app.log(tag, "play");
-				gameController.onCardPlayed(selectedCardView.getCard());
-				updateCardView();
+				boolean played = gameController.onCardPlayed(selectedCardView.getCard());
+				
 			} else {
-				selectedCardView.setPosition(startX, startY);
+				
 			}
-			
+			updateCardView();
 			selectedCardView = null;	
 		}
 		
