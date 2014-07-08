@@ -62,6 +62,10 @@ public class CardDeckView extends InputAdapter {
 	
 	private int lastX;
 	private int lastY;
+	private int startX;
+	private int startY;
+	
+	private int playCardY;
 	
 	public CardDeckView(Camera camera, Assets assets) {
 		this.camera = camera;
@@ -110,6 +114,10 @@ public class CardDeckView extends InputAdapter {
 				selectedCardView = cardView;
 				lastX = (int)v.x;
 				lastY = (int)v.y;
+				
+				startX = cardView.x;
+				startY = cardView.y;
+				
 				Gdx.app.log(tag, "touchDown " + cardView);
 				return true;
 			}
@@ -119,7 +127,22 @@ public class CardDeckView extends InputAdapter {
 
 	@Override
 	public boolean touchUp (int screenX, int screenY, int pointer, int button) {
-		selectedCardView = null;
+		if(selectedCardView != null) {
+			
+			Gdx.app.log(tag, "selectedCardView.y " + selectedCardView.y );
+			Gdx.app.log(tag, "playCardY " + playCardY );
+			
+			if(selectedCardView.y >= playCardY) {
+				Gdx.app.log(tag, "play");
+			} else {
+				selectedCardView.setPosition(startX, startY);
+			}
+			
+			selectedCardView = null;	
+		}
+		
+		
+		
 		return false;
 	}
 
@@ -135,5 +158,9 @@ public class CardDeckView extends InputAdapter {
 		}
 		
 		return false;
+	}
+
+	public void setPlayCardY(int y) {
+		playCardY = y;
 	}
 }

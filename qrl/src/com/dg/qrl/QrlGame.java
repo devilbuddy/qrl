@@ -203,6 +203,7 @@ public class QrlGame implements ApplicationListener {
 		
 		Gdx.app.log(tag, "mapScreenArea:" + mapScreenArea);
 		inputManager.setTouchableArea(mapScreenArea);
+		cardDeckView.setPlayCardY((int) (mainCamera.viewportHeight - mainCamera.viewportWidth));
 	}
 
 	@Override
