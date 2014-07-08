@@ -12,11 +12,13 @@ import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.scenes.scene2d.utils.NinePatchDrawable;
+import com.dg.qrl.QrlGame.GameController;
 
 public class CardDeckView extends InputAdapter {
 
 	public static class CardView {
 		
+		private Card card;
 		private int x;
 		private int y;
 		private int width;
@@ -26,7 +28,8 @@ public class CardDeckView extends InputAdapter {
 		TextureRegion symbol;
 		Rectangle touchBounds = new Rectangle();
 		
-		public CardView(int width, int height, NinePatch backgroundPatch, TextureRegion symbol) {
+		public CardView(Card card, int width, int height, NinePatch backgroundPatch, TextureRegion symbol) {
+			this.card = card;
 			this.width = width;
 			this.height = height; 
 			this.background = new NinePatchDrawable(backgroundPatch);
@@ -51,11 +54,17 @@ public class CardDeckView extends InputAdapter {
 			background.draw(spriteBatch, x, y, width, height);
 			spriteBatch.draw(symbol, x + 1, y + height - symbol.getRegionHeight() - 1);
 		}
+		
+		public Card getCard() {
+			return card;
+		}
 	}
 
 	private static final String tag = "CardDeckView";
 	
 	private final Camera camera;
+	private final Assets assets;
+	private final GameController gameController;
 	
 	private List<CardView> cardViews = new ArrayList<CardDeckView.CardView>();
 	private CardView selectedCardView = null;
@@ -67,13 +76,21 @@ public class CardDeckView extends InputAdapter {
 	
 	private int playCardY;
 	
-	public CardDeckView(Camera camera, Assets assets) {
+	public CardDeckView(Camera camera, Assets assets, GameController gameController) {
 		this.camera = camera;
-	
+		this.assets = assets;
+		this.gameController = gameController;
+		
+		updateCardView();
+	}
+
+	private void updateCardView() {
+		cardViews.clear();
 		int x = 50;
 		int y = 30;
-		for(int i = 0; i < 3; i++) {
-			CardView cardView = new CardView(30, 45, assets.cardBackgroundPatch, assets.orcTextureRegion);
+		List<Card> cards = gameController.getPlayer().getCards();
+		for(Card card : cards) {
+			CardView cardView = new CardView(card, 30, 45, assets.cardBackgroundPatch, assets.orcTextureRegion);
 			cardView.setPosition(x, y);
 			cardViews.add(cardView);
 			
@@ -129,11 +146,10 @@ public class CardDeckView extends InputAdapter {
 	public boolean touchUp (int screenX, int screenY, int pointer, int button) {
 		if(selectedCardView != null) {
 			
-			Gdx.app.log(tag, "selectedCardView.y " + selectedCardView.y );
-			Gdx.app.log(tag, "playCardY " + playCardY );
-			
 			if(selectedCardView.y >= playCardY) {
 				Gdx.app.log(tag, "play");
+				gameController.onCardPlayed(selectedCardView.getCard());
+				updateCardView();
 			} else {
 				selectedCardView.setPosition(startX, startY);
 			}

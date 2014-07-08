@@ -7,10 +7,11 @@ import com.badlogic.gdx.input.GestureDetector.GestureListener;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.math.Vector3;
+import com.dg.qrl.QrlGame.GameController;
 
 public class InputManager extends InputMultiplexer implements GestureListener {
 
-	private final World world;
+	private final GameController gameContoller;
 	private final Camera mapCamera;
 	private final Camera mainCamera;
 	private final GestureDetector gestureDetector;
@@ -19,8 +20,8 @@ public class InputManager extends InputMultiplexer implements GestureListener {
 	
 	private final Vector3 tmp = new Vector3();
 	
-	public InputManager(World world, Camera camera, Camera mainCamera) {
-		this.world = world;
+	public InputManager(GameController world, Camera camera, Camera mainCamera) {
+		this.gameContoller = world;
 		this.mapCamera = camera;
 		this.mainCamera = mainCamera;
 		gestureDetector = new GestureDetector(this);
@@ -81,7 +82,7 @@ public class InputManager extends InputMultiplexer implements GestureListener {
 			int tileX = (int) (v.x / 8);
 			int tileY = (int) (v.y / 8);
 			
-			world.onTileTapped(tileX, tileY);
+			gameContoller.onTileTapped(tileX, tileY);
 		}
 		return false;
 	}

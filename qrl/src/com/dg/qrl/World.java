@@ -21,13 +21,18 @@ import com.badlogic.gdx.Gdx;
 import com.dg.qrl.Card.CardType;
 import com.dg.qrl.Entity.Point;
 import com.dg.qrl.Monster.Type;
+import com.dg.qrl.QrlGame.GameController;
 import com.nuclearunicorn.libroguelike.utils.pathfinder.astar.Mover;
 import com.nuclearunicorn.libroguelike.utils.pathfinder.astar.PathFinder;
 import com.nuclearunicorn.libroguelike.utils.pathfinder.astar.TileBasedMap;
 import com.nuclearunicorn.libroguelike.utils.pathfinder.astar.implementation.AStarPathFinder;
 
-public class World {
 
+public class World implements GameController {
+
+	
+
+	
 	public enum TileType {
 		VOID(false),
 		WALL(true),
@@ -336,6 +341,10 @@ public class World {
 		
 
 		player = new Player(this);
+		for(int i = 0; i < 5; i++) {
+			Card card = new Card(CardType.FIREBALL);
+			player.addCard(card);
+		}
 		addEntity(player, 0, 0);
 		scheduler.add(player);
 		
@@ -361,6 +370,10 @@ public class World {
 				player.setPath(path);	
 			}
 		}
+	}
+	
+	public void onCardPlayed(Card card) {
+		player.removeCard(card);
 	}
 	
 	public List<Point> findPath(Point from, Point to) {

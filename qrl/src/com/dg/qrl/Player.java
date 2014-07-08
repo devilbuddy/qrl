@@ -61,6 +61,10 @@ public class Player extends Entity implements Actor {
 		cards.add(card);
 	}
 	
+	public void removeCard(Card card) {
+		cards.remove(card);
+	}
+	
 	public List<Card> getCards() {
 		return cards;
 	}

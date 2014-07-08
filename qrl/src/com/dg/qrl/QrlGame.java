@@ -17,6 +17,12 @@ import com.dg.qrl.Entity.Point;
 
 public class QrlGame implements ApplicationListener {
 	
+	public interface GameController {
+		Player getPlayer();
+		void onTileTapped(int x, int y);
+		void onCardPlayed(Card card);
+	}
+	
 	private static final String tag = "QrlGame";
 	
 	private static final int MAX_UPDATE_ITERATIONS = 5;
@@ -57,7 +63,7 @@ public class QrlGame implements ApplicationListener {
 		mapManager.initTiledMap(world);		
 		
 		tiledMapRenderer = new OrthogonalTiledMapRenderer(mapManager.getMap());
-		cardDeckView = new CardDeckView(mainCamera, assets);
+		cardDeckView = new CardDeckView(mainCamera, assets, world);
 		
 		inputManager = new InputManager(world, mapCamera, mainCamera);
 		inputManager.addProcessor(0 ,cardDeckView);
