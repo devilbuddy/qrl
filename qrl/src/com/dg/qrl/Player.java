@@ -46,6 +46,12 @@ public class Player extends Entity implements Actor {
 		if(canAct() && path != null && path.size() > 0) {
 			Point next = path.remove(0);
 			if(world.isPassable(next)) {
+				List<Card> cards = world.getEntities(next.getX(), next.getY(), Card.class);
+				for(Card card : cards) {
+					world.removeEntity(card);
+					addCard(card);
+					world.triggerUIRefresh();
+				}
 				world.moveEntity(this, next);
 				world.updateFieldOfView();
 				world.getScheduler().unlock(0.05f);
@@ -61,8 +67,10 @@ public class Player extends Entity implements Actor {
 		cards.add(card);
 	}
 	
-	public void removeCard(Card card) {
+	public void onCardPlayed(Card card) {
 		cards.remove(card);
+		world.getScheduler().unlock(0.05f);
+		
 	}
 	
 	public List<Card> getCards() {

@@ -1,6 +1,7 @@
 package com.dg.qrl;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Queue;
@@ -67,6 +68,16 @@ public class World implements GameController {
 				}
 			}
 			return false;
+		}
+		
+		public <T> List<T> getEntities(Class<T> clazz) {
+			List<T> list = new ArrayList<T>();
+			for(int i = 0; i < entities.size(); i++) {
+				if(entities.get(i).getClass() == clazz) {
+					list.add(clazz.cast(entities.get(i)));
+				}
+			}
+			return list;
 		}
 	}
 	
@@ -375,7 +386,7 @@ public class World implements GameController {
 	
 	public boolean onCardPlayed(Card card) {
 		if(player.canAct()) {
-			player.removeCard(card);
+			player.onCardPlayed(card);
 			return true;
 		} else {
 			return false;
@@ -398,6 +409,23 @@ public class World implements GameController {
 	
 	public List<Entity> getEntities() {
 		return entities;
+	}
+	
+	public <T> List<T> getEntities(int x, int y, Class<T> clazz) {
+		return mapData[y][x].getEntities(clazz);
+	}
+
+	private boolean needsUIRefresh;
+	public void triggerUIRefresh() {
+		needsUIRefresh = true;
+	}
+
+	public boolean needsUIRefresh() {
+		return needsUIRefresh;
+	}
+
+	public void onUIRefreshed() {
+		needsUIRefresh = false;
 	}
 	
 }

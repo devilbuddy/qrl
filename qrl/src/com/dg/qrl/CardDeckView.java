@@ -89,7 +89,7 @@ public class CardDeckView extends InputAdapter {
 		updateCardView();
 	}
 
-	private void updateCardView() {
+	public void updateCardView() {
 		cardViews.clear();
 		int x = 160/2 - (31 * 5)/2;
 		int y = 30;
