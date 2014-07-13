@@ -1,10 +1,13 @@
 package com.dg.qrl;
 
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 import java.util.concurrent.atomic.AtomicBoolean;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.InputMultiplexer;
 import com.dg.qrl.World.Actor;
 
 public class Player extends Entity implements Actor {
@@ -16,8 +19,10 @@ public class Player extends Entity implements Actor {
 	private AtomicBoolean canAct = new AtomicBoolean(false);
 	private List<Point> path;
 	
+	private List<Card> deck = new ArrayList<Card>();
 	private List<Card> cards = new ArrayList<Card>();
 	
+	public static final int MAX_CARDS_IN_HAND = 5;
 	
 	public Player(World world) {
 		super(true);
@@ -28,6 +33,9 @@ public class Player extends Entity implements Actor {
 	public void act() {
 		Gdx.app.log(tag, "act");
 		canAct.set(true);
+		getStats().increaseMana(1);
+		
+		world.triggerUIRefresh();
 		world.getScheduler().lock();
 		
 		stepPathIfPossible();
@@ -64,17 +72,40 @@ public class Player extends Entity implements Actor {
 	}
 	
 	public void addCard(Card card) {
-		cards.add(card);
+		if(cards.size() < MAX_CARDS_IN_HAND) {
+			cards.add(card);
+		} else {
+			addCardToDeck(card);
+		}
+	}
+
+	public void addCardToDeck(Card card) {
+		deck.add(card);
+		Collections.shuffle(deck);
 	}
 	
-	public void playCard(Card card) {
-		cards.remove(card);
-		world.getScheduler().unlock(0.05f);
+	public boolean playCard(Card card) {
+		int manaCost = card.getType().getManaCost();
+		if(canAct() && manaCost <= getStats().mp) {
+			cards.remove(card);
+			getStats().decreaseMana(manaCost);
+			if(deck.size() > 0) {
+				cards.add(deck.remove(0));
+			}
+			world.triggerUIRefresh();
+			world.getScheduler().unlock(0.05f);
+			return true;
+		} else {
+			return false;
+		}
 		
 	}
 	
 	public List<Card> getCards() {
 		return cards;
 	}
-	
+
+	public List<Card> getDeck() {
+		return deck;
+	}
 }

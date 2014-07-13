@@ -1,8 +1,14 @@
 package com.dg.qrl;
 
+import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.InputMultiplexer;
+
 public class Entity {
 
 	public static class Point {
+		
+		private static final String tag = "Point";
+		
 		@Override
 		public int hashCode() {
 			final int prime = 31;
@@ -67,6 +73,13 @@ public class Entity {
 			this.y = other.getY();
 		}
 		
+		public boolean isAdjacentTo(Point other) {
+			Gdx.app.log(tag, "isAdjacentTo " + this + " " + other);
+			int dx = Math.abs(this.x - other.x);
+			int dy = Math.abs(this.y - other.y);
+			return dx <= 1 && dy <=1;
+		}
+		
 		public String toString() {
 			return "[" + x + "," + y + "]";
 		}
@@ -77,6 +90,18 @@ public class Entity {
 		public int maxHp = 10;
 		public int mp = 5;
 		public int maxMp = 10;
+		public void increaseMana(int inc) {
+			mp+=inc;
+			if(mp > maxMp) {
+				mp = maxMp;
+			}
+		}
+		public void decreaseMana(int dec) {
+			mp-=dec;
+			if(mp < 0) {
+				mp = 0;
+			}
+		}
 	}
 	
 	private Point position = new Point();
@@ -98,4 +123,6 @@ public class Entity {
 	public boolean isSolid() {
 		return solid;
 	}
+
+	
 }

@@ -35,6 +35,11 @@ public class Monster extends Entity implements Actor {
 				if(world.isPassable(position.getX(), position.getY())) {
 					world.moveEntity(monster, position);
 				}
+			} else {
+				Player player = world.getPlayer();
+				if(world.existsLineOfSight(monster.getPosition(), player.getPosition(), monster.getProperties().alertRadius)) {
+					monster.setState(StateKey.MOVE_AND_ATTACK);	
+				}
 			}
 		}
 	};
@@ -54,20 +59,19 @@ public class Monster extends Entity implements Actor {
 		@Override
 		public void act(Monster monster, World world) {
 			Player player = world.getPlayer();
-			List<Point> path = world.findPath(monster.getPosition(), player.getPosition());
-			if(path != null) {
-				Point next = path.get(0);
-				if(next.equals(player.getPosition())) {
-					monster.gameController.attack(monster, player);
-				} else {
+			if(monster.getPosition().isAdjacentTo(player.getPosition())) {
+				monster.gameController.attack(monster, player);
+			} else {
+				List<Point> path = world.findPath(monster.getPosition(), player.getPosition());
+				if(path != null) {
+					Point next = path.get(0);
 					if(world.isPassable(next)) {
 						world.moveEntity(monster, next);	
 					}
-				}
-			} else {
-				monster.setState(StateKey.MOVE_RANDOMLY);
+				} else {
+					monster.setState(StateKey.MOVE_RANDOMLY);
+				}	
 			}
-			
 		}
 	};
 	

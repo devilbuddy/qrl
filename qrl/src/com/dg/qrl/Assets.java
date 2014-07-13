@@ -111,7 +111,7 @@ public class Assets {
 		
 		whitePixel = new TextureRegion(environmentTexture, 214, 251, 1, 1);
 	
-		cardBackgroundPatch = new NinePatch(tileTextureRegions[2][15], 3, 3, 3, 3);
+		cardBackgroundPatch = new NinePatch(new TextureRegion(environmentTexture, 0, 350, 8, 8), 3, 3, 3, 3);
 		
 		renderProperties.put(Monster.class, new RenderProperties() {
 			Map<Monster.Type, TextureRegion> regions = new HashMap<Monster.Type, TextureRegion>();
@@ -129,8 +129,8 @@ public class Assets {
 		renderProperties.put(Card.class, new RenderProperties() {
 			Map<CardType, TextureRegion> regions = new HashMap<Card.CardType, TextureRegion>();
 			{
-				regions.put(CardType.FIREBALL, tileTextureRegions[38][17]);
-				regions.put(CardType.HEAL, tileTextureRegions[38][18]);
+				regions.put(CardType.FIREBALL, tileTextureRegions[39][17]);
+				regions.put(CardType.HEAL, tileTextureRegions[39][18]);
 			}
 			@Override
 			public TextureRegion getTextureRegion(Entity entity) {

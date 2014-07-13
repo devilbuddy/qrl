@@ -120,7 +120,7 @@ public class QrlGame implements ApplicationListener {
 			}
 		}
 		
-		Entity player = world.getPlayer();
+		Player player = world.getPlayer();
 		
 		List<Entity> entities = world.getEntities();
 		for(int i = 0; i < entities.size(); i++) {
@@ -138,7 +138,7 @@ public class QrlGame implements ApplicationListener {
 		
 		spriteBatch.setProjectionMatrix(mainCamera.combined);
 		spriteBatch.begin();
-		spriteBatch.setColor(Color.WHITE);
+		spriteBatch.setColor(Color.ORANGE);
 		float mapHeight = mapCamera.viewportWidth * 2;
 		spriteBatch.draw(assets.whitePixel, 0, 0, mainCamera.viewportWidth, mainCamera.viewportHeight - mapHeight);
 		
@@ -151,10 +151,11 @@ public class QrlGame implements ApplicationListener {
 		cardDeckView.draw(spriteBatch);
 		Stats stats = player.getStats();
 		
-		spriteBatch.setColor(Color.PINK);
-		spriteBatch.draw(assets.whitePixel, 1, 1, mainCamera.viewportWidth - 2, 10);
-		assets.font.draw(spriteBatch, "HEALTH: " + stats.hp + "/" + stats.maxHp, 2, 8);
-		assets.font.draw(spriteBatch, "MANA: " + stats.mp + "/" + stats.maxMp, 80, 8);
+		spriteBatch.setColor(Color.RED);
+		spriteBatch.draw(assets.whitePixel, 1, 1, mainCamera.viewportWidth - 2, 16);
+		assets.font.draw(spriteBatch, "HEALTH: " + stats.hp + "/" + stats.maxHp, 2, 9);
+		assets.font.draw(spriteBatch, "MANA: " + stats.mp + "/" + stats.maxMp, 80, 9);
+		assets.font.draw(spriteBatch, "DECK: " + player.getDeck().size(), 2, 17);
 		
 		
 		spriteBatch.end();

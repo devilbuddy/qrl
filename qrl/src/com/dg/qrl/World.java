@@ -315,7 +315,7 @@ public class World implements GameController {
 	}
 	
 	public void moveEntity(Entity entity, Point newPosition) {
-		Gdx.app.log(tag, "moveEntity " + entity + " to:" + newPosition);
+		//Gdx.app.log(tag, "moveEntity " + entity + " to:" + newPosition);
 		getTile(entity.getPosition()).entities.remove(entity);
 		entity.getPosition().set(newPosition);
 		getTile(newPosition).entities.add(entity);
@@ -342,7 +342,8 @@ public class World implements GameController {
 					}
 					
 					if(r.nextFloat() < 0.05f) {
-						Card card = new Card(CardType.FIREBALL);
+						CardType cardType = r.nextBoolean() ? CardType.FIREBALL : CardType.HEAL;
+						Card card = new Card(cardType);
 						addEntity(card, x, y);
 					}
 				}	
@@ -351,7 +352,7 @@ public class World implements GameController {
 		
 
 		player = new Player(this);
-		for(int i = 0; i < 5; i++) {
+		for(int i = 0; i < Player.MAX_CARDS_IN_HAND; i++) {
 			CardType cardType = r.nextBoolean() ? CardType.FIREBALL : CardType.HEAL;
 			Card card = new Card(cardType);
 			player.addCard(card);
@@ -429,6 +430,7 @@ public class World implements GameController {
 
 	@Override
 	public void attack(Entity attacker, Entity defender) {
+		Gdx.app.log(tag, "attack " + attacker + " " + defender);
 		defender.getStats().hp--;
 		
 	}

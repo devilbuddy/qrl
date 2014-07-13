@@ -6,6 +6,7 @@ import java.util.List;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.InputAdapter;
 import com.badlogic.gdx.graphics.Camera;
+import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.NinePatch;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
@@ -54,10 +55,11 @@ public class CardDeckView extends InputAdapter {
 		}
 		
 		public void draw(SpriteBatch spriteBatch) {
+			spriteBatch.setColor(Color.WHITE);
 			background.draw(spriteBatch, x, y, width, height);
 			spriteBatch.draw(symbol, x + 1, y + height - symbol.getRegionHeight() - 1);
-		
-			font.draw(spriteBatch, "A:1", x + 1, y + height - 16);
+			font.setColor(Color.BLACK);
+			font.draw(spriteBatch, "M:" + card.getType().getManaCost(), x + 1, y + height - 16);
 		}
 		
 		public Card getCard() {
@@ -108,6 +110,7 @@ public class CardDeckView extends InputAdapter {
 	}
 	
 	public void draw(SpriteBatch spriteBatch) {
+		
 		for(int i = 0; i < cardViews.size(); i++) {
 			CardView cardView = cardViews.get(i);
 			cardView.draw(spriteBatch);
@@ -124,14 +127,14 @@ public class CardDeckView extends InputAdapter {
 	
 	@Override
 	public boolean touchDown (int screenX, int screenY, int pointer, int button) {
-		Gdx.app.log(tag, "screenX " + screenX + " screenY:" + screenY);
+		//Gdx.app.log(tag, "screenX " + screenX + " screenY:" + screenY);
 		
 		Vector3 v = unproject(screenX, screenY, camera);
 		
 		for(int i = 0; i < cardViews.size(); i++) {
 			CardView cardView = cardViews.get(i);
 
-			Gdx.app.log(tag, "touchBounds: " + cardView.touchBounds.toString());
+			//Gdx.app.log(tag, "touchBounds: " + cardView.touchBounds.toString());
 			if(cardView.touchBounds.contains(v.x, v.y)) {
 				selectedCardView = cardView;
 				lastX = (int)v.x;
@@ -140,7 +143,7 @@ public class CardDeckView extends InputAdapter {
 				startX = cardView.x;
 				startY = cardView.y;
 				
-				Gdx.app.log(tag, "touchDown " + cardView);
+				//Gdx.app.log(tag, "touchDown " + cardView);
 				return true;
 			}
 		}
@@ -152,7 +155,7 @@ public class CardDeckView extends InputAdapter {
 		if(selectedCardView != null) {
 			
 			if(selectedCardView.y >= playCardY) {
-				Gdx.app.log(tag, "play");
+				//Gdx.app.log(tag, "play");
 				boolean played = gameController.playCard(selectedCardView.getCard());
 				
 			} else {
