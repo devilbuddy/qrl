@@ -153,7 +153,7 @@ public class CardDeckView extends InputAdapter {
 			
 			if(selectedCardView.y >= playCardY) {
 				Gdx.app.log(tag, "play");
-				boolean played = gameController.onCardPlayed(selectedCardView.getCard());
+				boolean played = gameController.playCard(selectedCardView.getCard());
 				
 			} else {
 				

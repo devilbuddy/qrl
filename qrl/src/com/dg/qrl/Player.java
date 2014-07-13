@@ -67,7 +67,7 @@ public class Player extends Entity implements Actor {
 		cards.add(card);
 	}
 	
-	public void onCardPlayed(Card card) {
+	public void playCard(Card card) {
 		cards.remove(card);
 		world.getScheduler().unlock(0.05f);
 		

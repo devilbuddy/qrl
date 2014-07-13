@@ -109,7 +109,7 @@ public class Assets {
 		orcTextureRegion = tileTextureRegions[17][32];
 		snakeTextureRegion = tileTextureRegions[18][32];
 		
-		whitePixel = new TextureRegion(environmentTexture, 8, 8, 1, 1);
+		whitePixel = new TextureRegion(environmentTexture, 214, 251, 1, 1);
 	
 		cardBackgroundPatch = new NinePatch(tileTextureRegions[2][15], 3, 3, 3, 3);
 		

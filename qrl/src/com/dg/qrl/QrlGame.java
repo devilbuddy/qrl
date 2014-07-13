@@ -14,13 +14,15 @@ import com.badlogic.gdx.maps.tiled.renderers.OrthogonalTiledMapRenderer;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector3;
 import com.dg.qrl.Entity.Point;
+import com.dg.qrl.Entity.Stats;
 
 public class QrlGame implements ApplicationListener {
 	
 	public interface GameController {
 		Player getPlayer();
 		void onTileTapped(int x, int y);
-		boolean onCardPlayed(Card card);
+		boolean playCard(Card card);
+		void attack(Entity attacker, Entity defender);
 	}
 	
 	private static final String tag = "QrlGame";
@@ -140,12 +142,20 @@ public class QrlGame implements ApplicationListener {
 		float mapHeight = mapCamera.viewportWidth * 2;
 		spriteBatch.draw(assets.whitePixel, 0, 0, mainCamera.viewportWidth, mainCamera.viewportHeight - mapHeight);
 		
+		/*
 		assets.font.draw(spriteBatch, "FPS: " + Gdx.graphics.getFramesPerSecond(), 1, 40);
 		assets.font.draw(spriteBatch, "X:" + player.getPosition().getX() +  " Y:" + player.getPosition().getY(), 1, 32);
 		assets.font.draw(spriteBatch, "Camera:" + mapCamera.position, 1, 24);
 		assets.font.draw(spriteBatch, "mapScreenArea:" + mapScreenArea, 1, 16);
-		
+		*/
 		cardDeckView.draw(spriteBatch);
+		Stats stats = player.getStats();
+		
+		spriteBatch.setColor(Color.PINK);
+		spriteBatch.draw(assets.whitePixel, 1, 1, mainCamera.viewportWidth - 2, 10);
+		assets.font.draw(spriteBatch, "HEALTH: " + stats.hp + "/" + stats.maxHp, 2, 8);
+		assets.font.draw(spriteBatch, "MANA: " + stats.mp + "/" + stats.maxMp, 80, 8);
+		
 		
 		spriteBatch.end();
 		

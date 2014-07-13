@@ -4,6 +4,7 @@ import java.util.List;
 import java.util.Random;
 
 import com.badlogic.gdx.Gdx;
+import com.dg.qrl.QrlGame.GameController;
 import com.dg.qrl.World.Actor;
 
 public class Monster extends Entity implements Actor {
@@ -56,8 +57,12 @@ public class Monster extends Entity implements Actor {
 			List<Point> path = world.findPath(monster.getPosition(), player.getPosition());
 			if(path != null) {
 				Point next = path.get(0);
-				if(world.isPassable(next)) {
-					world.moveEntity(monster, next);	
+				if(next.equals(player.getPosition())) {
+					monster.gameController.attack(monster, player);
+				} else {
+					if(world.isPassable(next)) {
+						world.moveEntity(monster, next);	
+					}
 				}
 			} else {
 				monster.setState(StateKey.MOVE_RANDOMLY);
@@ -87,14 +92,16 @@ public class Monster extends Entity implements Actor {
 	
 	private final Type type;
 	private final World world;
+	private final GameController gameController;
 	private boolean canAct = false;
 	private State state;
 	private MonsterProperties properties = new MonsterProperties();
 	
-	public Monster(Type type, World world) {
+	public Monster(Type type, World world, GameController gameController) {
 		super(true);
 		this.type = type;
 		this.world = world;
+		this.gameController = gameController;
 		setState(StateKey.IDLE);
 	}
 	

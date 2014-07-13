@@ -1,7 +1,6 @@
 package com.dg.qrl;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Queue;
@@ -337,7 +336,7 @@ public class World implements GameController {
 				if(tileType == TileType.FLOOR) {
 					if(r.nextFloat() < 0.05f) {
 						Type type = r.nextBoolean() ? Type.SNAKE : Type.ORC;
-						Monster monster = new Monster(type, this);
+						Monster monster = new Monster(type, this, this);
 						addEntity(monster, x, y);
 						scheduler.add(monster);
 					}
@@ -384,9 +383,9 @@ public class World implements GameController {
 		}
 	}
 	
-	public boolean onCardPlayed(Card card) {
+	public boolean playCard(Card card) {
 		if(player.canAct()) {
-			player.onCardPlayed(card);
+			player.playCard(card);
 			return true;
 		} else {
 			return false;
@@ -426,6 +425,12 @@ public class World implements GameController {
 
 	public void onUIRefreshed() {
 		needsUIRefresh = false;
+	}
+
+	@Override
+	public void attack(Entity attacker, Entity defender) {
+		defender.getStats().hp--;
+		
 	}
 	
 }
