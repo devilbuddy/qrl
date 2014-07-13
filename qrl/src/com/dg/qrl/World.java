@@ -1,6 +1,8 @@
 package com.dg.qrl;
 
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Queue;
@@ -30,9 +32,6 @@ import com.nuclearunicorn.libroguelike.utils.pathfinder.astar.implementation.ASt
 
 public class World implements GameController {
 
-	
-
-	
 	public enum TileType {
 		VOID(false),
 		WALL(true),
@@ -53,14 +52,36 @@ public class World implements GameController {
 		public final TileType tileType;
 		public boolean seen = false;
 		public boolean inFov = false;
-		public List<Entity> entities = new ArrayList<Entity>();
+		private List<Entity> entities = new ArrayList<Entity>();
+		
+		private static Comparator<Entity> zOrderComparator = new Comparator<Entity>() {
+			
+			@Override
+			public int compare(Entity e1, Entity e2) {
+				Class<?> cardClass = Card.class;
+				if(cardClass.isInstance(e1) && !cardClass.isInstance(e2))
+					return 0;
+				if(!cardClass.isInstance(e1) && cardClass.isInstance(e2))
+					return 1;
+				
+				return 1;
+			}
+		};
 		
 		public Tile(TileType tileType) {
 			this.tileType = tileType;
 		}
 		
+		public void addEntity(Entity entity) {
+			entities.add(entity);
+			Collections.sort(entities, zOrderComparator);
+		}
+		
+		public void removeEntity(Entity entity) {
+			entities.remove(entity);
+		}
+		
 		public boolean isOccupied() {
-			
 			for(int i = 0; i < entities.size(); i++) {
 				if(entities.get(i).isSolid()) {
 					return true;
@@ -302,7 +323,7 @@ public class World implements GameController {
 	public void addEntity(Entity entity, int x, int y) {
 		entities.add(entity);
 		entity.getPosition().setX(x).setY(y);
-		getTile(x, y).entities.add(entity);
+		getTile(x, y).addEntity(entity);
 	}
 	
 	public void addEntity(Entity entity, Point position) {
@@ -311,14 +332,14 @@ public class World implements GameController {
 	
 	public void removeEntity(Entity entity) {
 		entities.remove(entity);
-		getTile(entity.getPosition()).entities.remove(entity);
+		getTile(entity.getPosition()).removeEntity(entity);
 	}
 	
 	public void moveEntity(Entity entity, Point newPosition) {
 		//Gdx.app.log(tag, "moveEntity " + entity + " to:" + newPosition);
-		getTile(entity.getPosition()).entities.remove(entity);
+		getTile(entity.getPosition()).removeEntity(entity);
 		entity.getPosition().set(newPosition);
-		getTile(newPosition).entities.add(entity);
+		getTile(newPosition).addEntity(entity);
 	}
 	
 	public void update() {

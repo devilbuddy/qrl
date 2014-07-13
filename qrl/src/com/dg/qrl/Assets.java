@@ -82,6 +82,12 @@ public class Assets {
 	public final Color seenShadowColor = new Color(0.5f, 0.5f, 0.5f, 0.7f);
 	public final Color notSeenShadowColor = new Color(0.5f, 0.5f, 0.5f, 1);
 	
+	public static final Color theme_purple = Color.valueOf("7f4b61");
+	public static final Color theme_light_green = Color.valueOf("a5ac82");
+	public static final Color theme_brown = Color.valueOf("4c4028");
+	public static final Color theme_bright_green = Color.valueOf("acb852");
+	public static final Color theme_light_yellow = Color.valueOf("f5ebb0");
+	
 	private Map<TileType, MapTile> tiles;
 	
 	interface RenderProperties {

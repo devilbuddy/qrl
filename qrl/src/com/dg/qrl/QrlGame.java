@@ -113,7 +113,7 @@ public class QrlGame implements ApplicationListener {
 					if(seen) {
 						spriteBatch.setColor(assets.seenShadowColor);
 					} else {
-						spriteBatch.setColor(assets.notSeenShadowColor);
+						spriteBatch.setColor(Assets.theme_brown);
 					}
 					spriteBatch.draw(assets.whitePixel, x * 8, y * 8, 8, 8);
 				} 				
@@ -138,7 +138,7 @@ public class QrlGame implements ApplicationListener {
 		
 		spriteBatch.setProjectionMatrix(mainCamera.combined);
 		spriteBatch.begin();
-		spriteBatch.setColor(Color.ORANGE);
+		spriteBatch.setColor(Assets.theme_purple);
 		float mapHeight = mapCamera.viewportWidth * 2;
 		spriteBatch.draw(assets.whitePixel, 0, 0, mainCamera.viewportWidth, mainCamera.viewportHeight - mapHeight);
 		
@@ -151,7 +151,7 @@ public class QrlGame implements ApplicationListener {
 		cardDeckView.draw(spriteBatch);
 		Stats stats = player.getStats();
 		
-		spriteBatch.setColor(Color.RED);
+		spriteBatch.setColor(Assets.theme_light_green);
 		spriteBatch.draw(assets.whitePixel, 1, 1, mainCamera.viewportWidth - 2, 16);
 		assets.font.draw(spriteBatch, "HEALTH: " + stats.hp + "/" + stats.maxHp, 2, 9);
 		assets.font.draw(spriteBatch, "MANA: " + stats.mp + "/" + stats.maxMp, 80, 9);
