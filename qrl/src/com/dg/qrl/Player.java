@@ -87,13 +87,17 @@ public class Player extends Entity implements Actor {
 	public boolean playCard(Card card) {
 		int manaCost = card.getType().getManaCost();
 		if(canAct() && manaCost <= getStats().mp) {
+			Gdx.app.log(tag, "playCard " + card);
 			cards.remove(card);
 			getStats().decreaseMana(manaCost);
 			if(deck.size() > 0) {
 				cards.add(deck.remove(0));
 			}
+			card.getType().getCardEffect().apply(world);
+			
 			world.triggerUIRefresh();
 			world.getScheduler().unlock(0.05f);
+			canAct.set(false);
 			return true;
 		} else {
 			return false;

@@ -102,6 +102,12 @@ public class Entity {
 				mp = 0;
 			}
 		}
+		public void increaseHealth(int inc) {
+			hp+=inc;
+			if(hp > maxHp) {
+				hp = maxHp;
+			}
+		}
 	}
 	
 	private Point position = new Point();
