@@ -396,11 +396,20 @@ public class World implements GameController {
 	}
 
 	public void onTileTapped(int x, int y) {
-		if(isSeen(x, y) && isPassable(x, y)) {
+		if(isSeen(x, y)) {
 			Point start = player.getPosition();
-			List<Point> path = findPath(start.getX(), start.getY(), x, y);
-			if(path != null ) {
-				player.setPath(path);	
+			
+			if(isPassable(x, y)) {
+				List<Point> path = findPath(start.getX(), start.getY(), x, y);
+				if(path != null ) {
+					player.setPath(path);	
+				}
+			} else if(start.isAdjacentTo(x, y)) {
+				
+				List<Monster> monsters = getEntities(x, y, Monster.class);
+				if(monsters.size() > 0) {
+					player.attack(monsters.get(0));
+				}
 			}
 		}
 	}

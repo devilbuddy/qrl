@@ -64,9 +64,7 @@ public class Player extends Entity implements Actor {
 				world.updateFieldOfView();
 				world.getScheduler().unlock(0.05f);
 				canAct.set(false);	
-			} else {
-				path = null;
-			}
+			} 
 			
 		} 
 	}
@@ -105,6 +103,12 @@ public class Player extends Entity implements Actor {
 		
 	}
 	
+	public void attack(Monster monster) {
+		world.attack(this, monster);
+		world.getScheduler().unlock(0.05f);
+		canAct.set(false);
+	}
+	
 	public List<Card> getCards() {
 		return cards;
 	}
@@ -112,4 +116,6 @@ public class Player extends Entity implements Actor {
 	public List<Card> getDeck() {
 		return deck;
 	}
+
+	
 }

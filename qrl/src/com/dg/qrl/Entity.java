@@ -74,10 +74,15 @@ public class Entity {
 		}
 		
 		public boolean isAdjacentTo(Point other) {
-			Gdx.app.log(tag, "isAdjacentTo " + this + " " + other);
-			int dx = Math.abs(this.x - other.x);
-			int dy = Math.abs(this.y - other.y);
+			return isAdjacentTo(other.x, other.y);
+		}
+		
+		public boolean isAdjacentTo(int x, int y) {
+			Gdx.app.log(tag, "isAdjacentTo " + this + " " + "[" + x + "," + y +"]");
+			int dx = Math.abs(this.x - x);
+			int dy = Math.abs(this.y - y);
 			return dx <= 1 && dy <=1;
+			
 		}
 		
 		public String toString() {
