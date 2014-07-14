@@ -461,8 +461,11 @@ public class World implements GameController {
 	@Override
 	public void attack(Entity attacker, Entity defender) {
 		Gdx.app.log(tag, "attack " + attacker + " " + defender);
-		defender.getStats().hp--;
-		
+		defender.getStats().decreaseHealth(1);
+		if(defender.getStats().hp <= 0) {
+			removeEntity(defender);
+			defender.onRemoved();
+		}
 	}
 	
 }

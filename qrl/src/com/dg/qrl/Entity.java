@@ -113,6 +113,12 @@ public class Entity {
 				hp = maxHp;
 			}
 		}
+		public void decreaseHealth(int dec) {
+			hp-=dec;
+			if(hp<0) {
+				hp = 0;
+			}
+		}
 	}
 	
 	private Point position = new Point();
@@ -133,6 +139,11 @@ public class Entity {
 	
 	public boolean isSolid() {
 		return solid;
+	}
+
+	public void onRemoved() {
+		// TODO Auto-generated method stub
+		
 	}
 
 	

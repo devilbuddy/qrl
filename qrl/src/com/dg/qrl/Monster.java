@@ -135,4 +135,9 @@ public class Monster extends Entity implements Actor {
 	boolean canSee(Point target) {
 		return world.existsLineOfSight(getPosition(), target);
 	}
+	
+	@Override
+	public void onRemoved() {
+		world.getScheduler().remove(this);
+	}
 }
