@@ -57,8 +57,6 @@ public class MessageLog {
 		}
 	}
 	
-	private final Color transparent = new Color(1, 1, 1, 1);
-	
 	public void draw(SpriteBatch spriteBatch) {
 		int y = screenHeight - 1;
 		for(int i = 0; i < messages.size(); i++) {

@@ -38,9 +38,11 @@ public class QrlGame implements ApplicationListener {
 	private OrthographicCamera mainCamera;
 	private OrthographicCamera mapCamera;
 	private SpriteBatch spriteBatch;
+	private Assets assets;
+	private Effects effects;
 	private TiledMapRenderer tiledMapRenderer;
 	private MessageLog messageLog;
-	private Assets assets;
+	
 	private World world;
 	private MapManager mapManager;
 	private InputManager inputManager;
@@ -58,6 +60,8 @@ public class QrlGame implements ApplicationListener {
 		spriteBatch = new SpriteBatch();
 		assets = new Assets();
 		assets.load();
+		
+		effects = new Effects(assets);
 		
 		messageLog = new MessageLog(assets);
 		messageLog.addMessage("foo");
@@ -139,6 +143,8 @@ public class QrlGame implements ApplicationListener {
 		
 		renderEntity(player, assets.playerTextureRegion);
 		
+		effects.draw(spriteBatch);;
+		
 		spriteBatch.end();
 		
 		spriteBatch.setProjectionMatrix(mainCamera.combined);
@@ -162,6 +168,7 @@ public class QrlGame implements ApplicationListener {
 		
 		spriteBatch.setColor(Assets.theme_light_green);
 		spriteBatch.draw(assets.whitePixel, 1, 1, mainCamera.viewportWidth - 2, 16);
+		assets.font.setColor(Color.BLACK);
 		assets.font.draw(spriteBatch, "HEALTH: " + stats.hp + "/" + stats.maxHp, 2, 9);
 		assets.font.draw(spriteBatch, "MANA: " + stats.mp + "/" + stats.maxMp, 80, 9);
 		assets.font.draw(spriteBatch, "DECK: " + player.getDeck().size(), 2, 17);
@@ -210,6 +217,7 @@ public class QrlGame implements ApplicationListener {
 		updateCamera();
 		world.update();
 		messageLog.update(delta);
+		effects.update(delta);
 		cardDeckView.update(delta);
 	}
 	
