@@ -124,9 +124,14 @@ public class Entity {
 	private Point position = new Point();
 	private Stats stats = new Stats();
 	private boolean solid;	
-	
-	public Entity(boolean solid) {
+	private String name;
+	public Entity(boolean solid, String name) {
 		this.solid = solid;
+		this.name = name;
+	}
+	
+	public String getName() {
+		return name;
 	}
 	
 	public Point getPosition() {

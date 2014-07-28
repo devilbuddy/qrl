@@ -10,7 +10,7 @@ import com.badlogic.gdx.utils.Pool;
 
 public class MessageLog {
 
-	private static final float MAX_AGE = 3;
+	private static final float MAX_AGE = 5;
 
 	private final BitmapFont font;
 	
@@ -43,7 +43,7 @@ public class MessageLog {
 		Message message = messagePool.obtain();
 		message.age = 0;
 		message.text = text;
-		messages.add(message);
+		messages.add(0, message);
 	}
 	
 	public void update(float delta) {
@@ -57,11 +57,17 @@ public class MessageLog {
 		}
 	}
 	
+	private final Color transparent = new Color(1, 1, 1, 1);
+	
 	public void draw(SpriteBatch spriteBatch) {
 		int y = screenHeight - 1;
 		for(int i = 0; i < messages.size(); i++) {
 			Message message = messages.get(i);
-			font.setColor(Color.WHITE);
+	
+			tmpColor.set(Color.WHITE);
+			float a = 1 - message.age/MAX_AGE;
+			tmpColor.mul(1, 1, 1, a);
+			font.setColor(tmpColor);
 			font.draw(spriteBatch, message.text, 2, y);
 			y-=font.getCapHeight();
 		}
@@ -69,6 +75,7 @@ public class MessageLog {
 
 	private int screenWidth;
 	private int screenHeight;
+	private Color tmpColor = new Color(Color.WHITE);
 	
 	public void resize(int screenWidth, int screenHeight) {
 		this.screenWidth = screenWidth;

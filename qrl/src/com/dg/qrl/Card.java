@@ -38,7 +38,7 @@ public class Card extends Entity {
 	private final CardType cardType;
 	
 	public Card(CardType cardType) {
-		super(false);
+		super(false, cardType.toString());
 		this.cardType = cardType;
 	}
 	

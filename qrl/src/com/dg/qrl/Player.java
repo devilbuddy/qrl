@@ -26,7 +26,7 @@ public class Player extends Entity implements Actor {
 	public static final int MAX_CARDS_IN_HAND = 5;
 	
 	public Player(World world, MessageLog messageLog) {
-		super(true);
+		super(true, "Hero");
 		this.world = world;
 		this.messageLog = messageLog;
 	}
@@ -110,6 +110,9 @@ public class Player extends Entity implements Actor {
 	}
 	
 	public void attack(Monster monster) {
+		
+		
+		
 		world.attack(this, monster);
 		world.getScheduler().unlock(0.05f);
 		canAct.set(false);

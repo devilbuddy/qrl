@@ -102,7 +102,7 @@ public class Monster extends Entity implements Actor {
 	private MonsterProperties properties = new MonsterProperties();
 	
 	public Monster(Type type, World world, GameController gameController) {
-		super(true);
+		super(true, type.toString());
 		this.type = type;
 		this.world = world;
 		this.gameController = gameController;
