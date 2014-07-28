@@ -15,6 +15,7 @@ public class Player extends Entity implements Actor {
 	private final String tag = "Player";
 	
 	private final World world;
+	private final MessageLog messageLog;
 	
 	private AtomicBoolean canAct = new AtomicBoolean(false);
 	private List<Point> path;
@@ -24,9 +25,10 @@ public class Player extends Entity implements Actor {
 	
 	public static final int MAX_CARDS_IN_HAND = 5;
 	
-	public Player(World world) {
+	public Player(World world, MessageLog messageLog) {
 		super(true);
 		this.world = world;
+		this.messageLog = messageLog;
 	}
 
 	@Override
@@ -96,6 +98,10 @@ public class Player extends Entity implements Actor {
 			world.triggerUIRefresh();
 			world.getScheduler().unlock(0.05f);
 			canAct.set(false);
+			
+			
+			messageLog.addMessage("Playing card - " + card.getType().toString());
+			
 			return true;
 		} else {
 			return false;

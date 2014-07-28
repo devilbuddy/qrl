@@ -39,6 +39,7 @@ public class QrlGame implements ApplicationListener {
 	private OrthographicCamera mapCamera;
 	private SpriteBatch spriteBatch;
 	private TiledMapRenderer tiledMapRenderer;
+	private MessageLog messageLog;
 	private Assets assets;
 	private World world;
 	private MapManager mapManager;
@@ -58,7 +59,11 @@ public class QrlGame implements ApplicationListener {
 		assets = new Assets();
 		assets.load();
 		
-		world = new World(30, 30);
+		messageLog = new MessageLog(assets);
+		messageLog.addMessage("foo");
+		messageLog.addMessage("message2");
+		
+		world = new World(30, 30, messageLog);
 		world.generate(1);
 		
 		mapManager = new MapManager(assets);
@@ -149,6 +154,10 @@ public class QrlGame implements ApplicationListener {
 		assets.font.draw(spriteBatch, "mapScreenArea:" + mapScreenArea, 1, 16);
 		*/
 		cardDeckView.draw(spriteBatch);
+		
+
+		messageLog.draw(spriteBatch);
+		
 		Stats stats = player.getStats();
 		
 		spriteBatch.setColor(Assets.theme_light_green);
@@ -200,6 +209,7 @@ public class QrlGame implements ApplicationListener {
 		inputManager.update();	
 		updateCamera();
 		world.update();
+		messageLog.update(delta);
 		cardDeckView.update(delta);
 	}
 	
@@ -222,6 +232,8 @@ public class QrlGame implements ApplicationListener {
 		mapScreenArea.setWidth(w).setHeight(w);
 		mapScreenArea.setX(0);
 		mapScreenArea.setY(0);
+		
+		messageLog.resize((int)mainCamera.viewportWidth, (int)mainCamera.viewportHeight);
 		
 		Gdx.app.log(tag, "mapScreenArea:" + mapScreenArea);
 		inputManager.setTouchableArea(mapScreenArea);

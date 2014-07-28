@@ -219,6 +219,7 @@ public class World implements GameController {
 	
 	private int width;
 	private int height;
+	private MessageLog messageLog;
 	
 	private Tile[][] mapData;
 
@@ -236,9 +237,10 @@ public class World implements GameController {
 	
 	private List<Entity> entities = new ArrayList<Entity>();
 	
-	public World(int width, int height) {
+	public World(int width, int height, MessageLog messageLog) {
 		this.width = width;
 		this.height = height;
+		this.messageLog = messageLog;
 		
 		fovAlgorithm = new PrecisePermissive();
 		losAlgorithm = new BresOpportunisticLos();
@@ -372,7 +374,7 @@ public class World implements GameController {
 		}
 		
 
-		player = new Player(this);
+		player = new Player(this, messageLog);
 		for(int i = 0; i < Player.MAX_CARDS_IN_HAND; i++) {
 			CardType cardType = r.nextBoolean() ? CardType.FIREBALL : CardType.HEAL;
 			Card card = new Card(cardType);
