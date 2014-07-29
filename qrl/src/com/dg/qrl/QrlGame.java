@@ -64,8 +64,6 @@ public class QrlGame implements ApplicationListener {
 		effects = new Effects(assets);
 		
 		messageLog = new MessageLog(assets);
-		messageLog.addMessage("foo");
-		messageLog.addMessage("message2");
 		
 		world = new World(30, 30, messageLog);
 		world.generate(1);

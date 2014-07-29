@@ -75,6 +75,7 @@ public class Assets {
 	public TextureRegion orcTextureRegion;
 	public TextureRegion snakeTextureRegion;
 	public TextureRegion whitePixel;
+	public TextureRegion smallCardFacedown;
 	
 	public NinePatch cardBackgroundPatch;
 	
@@ -114,6 +115,7 @@ public class Assets {
 		playerTextureRegion = tileTextureRegions[0][30];
 		orcTextureRegion = tileTextureRegions[17][32];
 		snakeTextureRegion = tileTextureRegions[18][32];
+		smallCardFacedown = tileTextureRegions[40][0];
 		
 		whitePixel = new TextureRegion(environmentTexture, 214, 251, 1, 1);
 	
@@ -141,6 +143,9 @@ public class Assets {
 			@Override
 			public TextureRegion getTextureRegion(Entity entity) {
 				Card card = Card.class.cast(entity);
+				if(card.isFacedown()) {
+					return smallCardFacedown;
+				}
 				return regions.get(card.getType());
 			}
 		});

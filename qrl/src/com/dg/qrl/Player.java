@@ -74,6 +74,7 @@ public class Player extends Entity implements Actor {
 	public void addCard(Card card) {
 		if(cards.size() < MAX_CARDS_IN_HAND) {
 			cards.add(card);
+			card.flip();
 		} else {
 			addCardToDeck(card);
 		}
@@ -91,7 +92,9 @@ public class Player extends Entity implements Actor {
 			cards.remove(card);
 			getStats().decreaseMana(manaCost);
 			if(deck.size() > 0) {
-				cards.add(deck.remove(0));
+				Card c = deck.remove(0);
+				c.flip();
+				cards.add(c);
 			}
 			card.getType().getCardEffect().apply(world);
 			

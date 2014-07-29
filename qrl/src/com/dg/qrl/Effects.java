@@ -11,6 +11,7 @@ public class Effects {
 		int y;
 		float age;
 		float maxAge;
+		float gravity;
 	}
 	
 	

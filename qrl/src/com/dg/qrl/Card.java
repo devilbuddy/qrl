@@ -36,7 +36,7 @@ public class Card extends Entity {
 	}
 	
 	private final CardType cardType;
-	
+	private boolean faceDown = true;
 	public Card(CardType cardType) {
 		super(false, cardType.toString());
 		this.cardType = cardType;
@@ -44,5 +44,13 @@ public class Card extends Entity {
 	
 	public CardType getType() {
 		return cardType;
+	}
+
+	public boolean isFacedown() {
+		return faceDown;
+	}
+	
+	public void flip() {
+		faceDown = false;
 	}
 }
