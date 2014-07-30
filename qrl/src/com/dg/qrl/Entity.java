@@ -81,8 +81,9 @@ public class Entity {
 			Gdx.app.log(tag, "isAdjacentTo " + this + " " + "[" + x + "," + y +"]");
 			int dx = Math.abs(this.x - x);
 			int dy = Math.abs(this.y - y);
-			return dx <= 1 && dy <=1;
-			
+			boolean adjacent = dx <= 1 && dy <=1;
+			Gdx.app.log(tag, "adjacent:" + adjacent);
+			return adjacent;
 		}
 		
 		public String toString() {

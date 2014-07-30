@@ -1,5 +1,8 @@
 package com.dg.qrl;
 
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 import java.util.Random;
 
@@ -56,21 +59,45 @@ public class Monster extends Entity implements Actor {
 	
 	private static final State moveAndAttackState = new State() {
 		
+		private Point selectRandomAdjacentTile(World world, Point position) {
+			
+			List<Point> possible = new ArrayList<Entity.Point>();
+			for(int dx = -1; dx <=1; dx++) {
+				for(int dy = -1; dy <= 1; dy++) {
+					if(dx != 0 && dy != 0) {
+						if(world.isPassable(position.getX() + dx, position.getY() + dy)) {
+							possible.add(new Point(position.getX() + dx, position.getY() + dy));
+						}
+					}
+				}
+			}
+			if(possible.size() > 0) {
+				Collections.shuffle(possible);
+				return possible.get(0);
+			}
+			return null;
+		}
+		
 		@Override
 		public void act(Monster monster, World world) {
 			Player player = world.getPlayer();
 			if(monster.getPosition().isAdjacentTo(player.getPosition())) {
 				monster.gameController.attack(monster, player);
 			} else {
-				List<Point> path = world.findPath(monster.getPosition(), player.getPosition());
-				if(path != null) {
-					Point next = path.get(0);
-					if(world.isPassable(next)) {
-						world.moveEntity(monster, next);	
+				Point target = selectRandomAdjacentTile(world, player.getPosition());
+				if(target != null) {
+					List<Point> path = world.findPath(monster.getPosition(), target);
+					if(path != null) {
+						
+						Point next = path.get(0);
+						if(world.isPassable(next)) {
+							world.moveEntity(monster, next);	
+							return;
+						}
 					}
-				} else {
-					monster.setState(StateKey.MOVE_RANDOMLY);
-				}	
+				}
+				Gdx.app.log(tag, "no path");
+				monster.setState(StateKey.MOVE_RANDOMLY);	
 			}
 		}
 	};

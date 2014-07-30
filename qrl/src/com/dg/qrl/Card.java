@@ -6,8 +6,15 @@ public class Card extends Entity {
 		void apply(World world);
 	}
 	
-	private static final CardEffect noEffect = new CardEffect() {
-		
+	private static final CardEffect fireBallEffect = new CardEffect() {
+		@Override
+		public void apply(World world) {
+			Player player = world.getPlayer();
+			player.getStats().increaseHealth(2);
+		}
+	};
+	
+	private static final CardEffect healEffect = new CardEffect() {
 		@Override
 		public void apply(World world) {
 			Player player = world.getPlayer();
@@ -16,8 +23,8 @@ public class Card extends Entity {
 	};
 	
 	public enum CardType {
-		FIREBALL(2, noEffect),
-		HEAL(3, noEffect);
+		FIREBALL(2, fireBallEffect),
+		HEAL(3, healEffect);
 		
 		private final int manaCost;
 		private final CardEffect cardEffect;
@@ -50,7 +57,7 @@ public class Card extends Entity {
 		return faceDown;
 	}
 	
-	public void flip() {
+	public void turnFaceUp() {
 		faceDown = false;
 	}
 }
