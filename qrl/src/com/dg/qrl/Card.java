@@ -11,7 +11,7 @@ public class Card extends Entity {
 		public void apply(World world) {
 			Player player = world.getPlayer();
 			player.getStats().increaseHealth(2);
-		}
+		}	
 	};
 	
 	private static final CardEffect healEffect = new CardEffect() {
