@@ -1,5 +1,6 @@
 package com.dg.qrl;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import com.badlogic.gdx.ApplicationListener;
@@ -13,6 +14,7 @@ import com.badlogic.gdx.maps.tiled.TiledMapRenderer;
 import com.badlogic.gdx.maps.tiled.renderers.OrthogonalTiledMapRenderer;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector3;
+import com.dg.qrl.Effects.Effect;
 import com.dg.qrl.Entity.Point;
 import com.dg.qrl.Entity.Stats;
 
@@ -62,10 +64,9 @@ public class QrlGame implements ApplicationListener {
 		assets.load();
 		
 		effects = new Effects(assets);
-		
 		messageLog = new MessageLog(assets);
 		
-		world = new World(30, 30, messageLog);
+		world = new World(30, 30, messageLog, effects);
 		world.generate(1);
 		
 		mapManager = new MapManager(assets);
@@ -140,9 +141,6 @@ public class QrlGame implements ApplicationListener {
 		}
 		
 		renderEntity(player, assets.playerTextureRegion);
-		
-		effects.draw(spriteBatch);;
-		
 		spriteBatch.end();
 		
 		spriteBatch.setProjectionMatrix(mainCamera.combined);
@@ -176,9 +174,19 @@ public class QrlGame implements ApplicationListener {
 		
 	}
 
+	private List<Effect> effectsTmp = new ArrayList<Effect>();
 	private void renderEntity(Entity entity, TextureRegion textureRegion) {
 		spriteBatch.setColor(Color.WHITE);
-		spriteBatch.draw(textureRegion, entity.getPosition().getX() * 8, entity.getPosition().getY() * 8);
+		int posX = entity.getPosition().getX() * 8;
+		int posY = entity.getPosition().getY() * 8;
+		spriteBatch.draw(textureRegion, posX, posY);
+	
+		effects.getEffectsForEntity(entity, effectsTmp);
+		if(effectsTmp.size() > 0) {
+			for(int i = 0; i < effectsTmp.size(); i++) {
+				effectsTmp.get(i).draw(spriteBatch, posX, posY);
+			}
+		}
 	}
 	
 	private void updateCamera() {

@@ -46,14 +46,25 @@ public class Effects {
 		}
 	}
 	
-	private class Effect implements Poolable {
+	public class Effect implements Poolable {
 		Entity target;
 		List<Particle> particles = new ArrayList<Effects.Particle>();
 		public float age;
 		public float maxAge;
 		
+		
+		
 		public void update(float delta) {
 			age += delta;
+			
+			for(int i = 0; i < 3; i++) {
+				Particle particle = particlePool.obtain();
+				particle.maxAge = maxAge/2;
+				particle.position.set(i, i);
+				particle.acceleration.set(0.01f * i, 0.02f * i);
+				particles.add(particle);
+			}
+			
 			for(int i = particles.size() - 1; i >= 0; i--) {
 				Particle particle = particles.get(i);
 				particle.update(delta);
@@ -73,6 +84,14 @@ public class Effects {
 			}
 			particles.clear();
 			
+		}
+		
+		public void draw(SpriteBatch spriteBatch, int posX, int posY) {
+			for(int j = 0; j < particles.size(); j++) {
+				Particle particle = particles.get(j);
+				
+				spriteBatch.draw(assets.whitePixel, posX + particle.position.x, posY + particle.position.y);
+			}
 		}
 	}
 	
@@ -97,8 +116,17 @@ public class Effects {
 	public void addEffect(EffectType type, Entity target) {
 		Effect effect = effectPool.obtain();
 		effect.target = target;
-		
+		effect.maxAge = type.maxAge;
 		effects.add(effect);
+	}
+	
+	public void getEffectsForEntity(Entity entity, List<Effect> effectsOut) {
+		effectsOut.clear();
+		for(int i = 0; i < effects.size(); i++) {
+			if(effects.get(i).target == entity) {
+				effectsOut.add(effects.get(i));
+			}
+		}
 	}
 	
 	public void update(float delta) {
@@ -108,17 +136,6 @@ public class Effects {
 			if(effect.age >= effect.maxAge) {
 				effects.remove(i);
 				effectPool.free(effect);
-			}
-		}
-	}
-	
-	public void draw(SpriteBatch spriteBatch) {
-		for(int i = 0; i < effects.size(); i++) {
-			Effect effect = effects.get(i);
-			for(int j = 0; j < effect.particles.size(); j++) {
-				Particle particle = effect.particles.get(j);
-				
-				spriteBatch.draw(assets.whitePixel, particle.position.x, particle.position.y);
 			}
 		}
 	}

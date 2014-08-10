@@ -220,6 +220,7 @@ public class World implements GameController {
 	private int width;
 	private int height;
 	private MessageLog messageLog;
+	private Effects effects;
 	
 	private Tile[][] mapData;
 
@@ -237,10 +238,11 @@ public class World implements GameController {
 	
 	private List<Entity> entities = new ArrayList<Entity>();
 	
-	public World(int width, int height, MessageLog messageLog) {
+	public World(int width, int height, MessageLog messageLog, Effects effects) {
 		this.width = width;
 		this.height = height;
 		this.messageLog = messageLog;
+		this.effects = effects;
 		
 		fovAlgorithm = new PrecisePermissive();
 		losAlgorithm = new BresOpportunisticLos();
@@ -253,6 +255,10 @@ public class World implements GameController {
 	
 	public Scheduler getScheduler() {
 		return scheduler;
+	}
+	
+	public Effects getEffects() {
+		return effects;
 	}
 	
 	public int getWidth() {
