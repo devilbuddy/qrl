@@ -184,7 +184,16 @@ public class QrlGame implements ApplicationListener {
 		effects.getEffectsForEntity(entity, effectsTmp);
 		if(effectsTmp.size() > 0) {
 			for(int i = 0; i < effectsTmp.size(); i++) {
-				effectsTmp.get(i).draw(spriteBatch, posX, posY);
+				Effect effect = effectsTmp.get(i);
+				int effectX = posX;
+				int effectY = posY;
+				switch(effect.anchor) {
+				case CENTER:
+					effectX += 4;
+					effectY += 4;
+					break;
+				}
+				effectsTmp.get(i).draw(spriteBatch, effectX, effectY);
 			}
 		}
 	}

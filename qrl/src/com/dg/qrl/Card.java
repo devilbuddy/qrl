@@ -1,5 +1,6 @@
 package com.dg.qrl;
 
+import com.dg.qrl.Effects.Anchor;
 import com.dg.qrl.Effects.EffectType;
 
 public class Card extends Entity {
@@ -21,7 +22,7 @@ public class Card extends Entity {
 		public void apply(World world) {
 			Player player = world.getPlayer();
 			player.getStats().increaseHealth(2);
-			world.getEffects().addEffect(EffectType.POWERUP, player);
+			world.getEffects().addEffect(EffectType.POWERUP, player, Anchor.CENTER);
 		}
 	};
 	
